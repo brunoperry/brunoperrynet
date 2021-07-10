@@ -1,0 +1,6 @@
+<svg width="100%" height="100%" viewBox="0 0 172 172" >
+    <rect x="0" y="0" width="172" height="172" fill="#3d3d3d"/>
+    <path d="m 20,105 v 40 h 132 v -40 h -20 v 20 H 40 v -20 z" fill="#eeeeee"/>
+   <path d="M 40.006199,27.000906 H 60.005966 V 79.000854 H 40.006199 Z" fill="#eeeeee"/>
+   <path d="m 112.0062,27.000906 h 19.99977 V 79.000854 H 112.0062 Z" fill="#eeeeee"/>
+</svg>

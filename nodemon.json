@@ -1,0 +1,8 @@
+{
+    "watch": [
+        "src/"
+    ],
+    "igonre": [
+        "nfs/brunoperry_net"
+    ]
+}

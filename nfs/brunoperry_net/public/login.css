@@ -1,0 +1,60 @@
+:root {
+    --color-a: #FFF6FF;
+    --color-b: var(--color-blue);
+    --color-base: var(--color-blue);
+}
+
+
+#login-container {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    transform: scale(0.9);
+    transition: transform var(--speed) ease-in-out;
+}
+#login-container svg {
+    height: 30%;
+}
+#login-container label {
+    text-transform: capitalize;
+    font-size: var(--s-font-size);
+    font-weight: 200;
+    margin-top: var(--padding);
+}
+#login-container form {
+    padding: 0;
+    flex: 1;
+    justify-content: center;
+}
+#login-container input {
+    flex: 1;
+    max-height: var(--button-height);
+    width: 100%;
+    padding: 0;
+}
+
+#login-container .actions-container {
+    flex: 1;
+    max-height: var(--button-height);
+    justify-content: space-between;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform var(--speed) ease-in-out, opacity var(--speed) ease-in-out;
+}
+
+#cancel-button {
+    color: var(--color-overlay) !important;
+}
+#login-button {
+    background-color: var(--color-blue);
+    font-size: var(--m-font-size) !important;
+}
+
+#login-container button {
+    font-weight: bold;
+    color: var(--color-a);
+    font-size: var(--s-font-size);
+    flex: none;
+}

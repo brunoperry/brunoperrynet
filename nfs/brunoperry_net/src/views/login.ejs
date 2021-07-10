@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bpnet - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css">
+    <script src="login.js"></script>
+</head>
+
+<body>
+    <div id="login-container">
+        <svg width="100%" height="100%" viewBox="0 0 32 32" style="fill-rule:evenodd;clip-rule:evenodd;">
+            <path fill="var(--color-b)" d="M 0,0 H 32 V 32 H 0 Z" />
+            <path
+                d="M 24.000004,12 V 4.0000001 H 8.0000037 V 12 H 5.0000036 V 28.000001 H 27.000004 V 12 Z m -11,9.000001 h 6 v -6 h -6 z m -3,-9.000001 h 12 V 6.0000002 h -12 z"
+                fill="var(--color-a)" />
+        </svg>
+
+
+        <form id="login-form" action="/login/dologin" method="POST">
+            <label>Username</label>
+            <input name="username" type="text" placeholder="username" autocomplete>
+            <label>Password</label>
+            <input name="password" type="password" placeholder="password" autocomplete>
+
+        </form>
+        <div class="actions-container">
+            <button id="cancel-button" onclick="window.location='/'">cancel</button>
+            <button id="login-button" class="blue"
+                onclick="document.querySelector('#login-form').submit()">login</button>
+        </div>
+    </div>
+</body>
+
+</html>

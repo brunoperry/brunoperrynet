@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="cpanel_favico.png">
+    <title>Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="cpanel.css">
+    <script src="components.js"></script>
+    <script src="animation.js"></script>
+    <script src="cpanel.js"></script>
+</head>
+
+<body>
+
+    <div id="cpanel-container">
+        <expandable-list id="apps-list">
+            <toggle-button label="apps" class="toggle-button" slot="toggle">
+                <div class="icons-container" slot="icons">
+                    <svg width="50%" height="50%" viewBox="0 0 30 20" fill="var(--color-a)">
+                        <path
+                            d="M 0,5.402167 5.661291,0 14.975807,9.123645 24.41129,0.120033 30,5.594218 14.903226,20 Z" />
+                    </svg>
+                    <svg width="50%" height="50%" viewBox="0 0 30 20" fill="var(--color-a)">
+                        <path
+                            d="M 24.338709,20 15.024193,10.876355 5.5887097,19.879967 0,14.405782 15.096774,0 30,14.597833 Z" />
+                    </svg>
+                </div>
+            </toggle-button>
+            <ul slot="list"></ul>
+        </expandable-list>
+
+        <expandable-list id="users-list">
+            <toggle-button label="users" class="toggle-button" slot="toggle">
+                <div class="icons-container" slot="icons">
+                    <svg width="50%" height="50%" viewBox="0 0 30 20" fill="var(--color-a)">
+                        <path
+                            d="M 0,5.402167 5.661291,0 14.975807,9.123645 24.41129,0.120033 30,5.594218 14.903226,20 Z" />
+                    </svg>
+                    <svg width="50%" height="50%" viewBox="0 0 30 20" fill="var(--color-a)">
+                        <path
+                            d="M 24.338709,20 15.024193,10.876355 5.5887097,19.879967 0,14.405782 15.096774,0 30,14.597833 Z" />
+                    </svg>
+                </div>
+            </toggle-button>
+            <ul slot="list"></ul>
+        </expandable-list>
+
+        <simple-button onclick="window.location.href='/login/logout'" label="logout" height="var(--button-height)">
+        </simple-button>
+        <simple-button onclick="window.location.href='/'" label="exit" height="var(--button-height)">
+        </simple-button>
+    </div>
+
+    <div id="app-edit-container">
+
+        <div class="edit-container">
+            <div class="input-container" style="margin: 0;">
+                <label id="app-id" class="prop-label">app id</label>
+            </div>
+            <div class="input-container">
+                <label class="prop-label">name</label>
+                <input id="app-name" type="text">
+            </div>
+
+            <div class="input-container">
+                <label class="prop-label">short name</label>
+                <input id="app-short-name" type="text">
+            </div>
+
+            <div class="input-container">
+                <label class="prop-label">url</label>
+                <input id="app-url" type="text">
+            </div>
+
+            <div class="select-container">
+                <label class="prop-label">state</label>
+                <select-group id="app-state" type="singlechoice">
+
+                </select-group>
+            </div>
+
+            <div class="select-container">
+                <label class="prop-label">type</label>
+                <select-group id="app-type" type="singlechoice">
+
+                </select-group>
+            </div>
+
+            <div class="select-container" id="components-container">
+                <label class="prop-label">components</label>
+                <select-group id="app-components" type="multiplechoice">
+
+                </select-group>
+            </div>
+
+            <div class="button-container">
+                <toggle-button id="app-admin" label="admin">
+                    <div class="icons-container" slot="icons">
+                        <svg width="50%" height="50%" viewBox="0 0 64 64" fill="var(--color-red)">
+                            <path d="M 0,0 H 64 V 64 H 0 Z" />
+                        </svg>
+                        <svg width="50%" height="50%" viewBox="0 0 64 64" fill="var(--color-green)">
+                            <path d="M 0,0 H 64 V 64 H 0 Z" />
+                        </svg>
+                    </div>
+                </toggle-button>
+            </div>
+            <div class="button-container">
+                <simple-button id="delete-app-button" label="delete app" f-size="var(--s-font-size)"
+                    b-color="var(--color-red)" f-weight="bold">
+                </simple-button>
+            </div>
+        </div>
+        <div class="actions-container">
+            <simple-button id="cancel-app-button" label="cancel" f-size="var(--s-font-size)" t-align="center"
+                f-color="var(--color-a)" f-weight="bold"></simple-button>
+            <simple-button id="save-app-button" label="save" f-size="var(--m-font-size)" t-align="center"
+                b-color="var(--color-a)" f-color="var(--color-blue)" f-weight="bold">
+            </simple-button>
+        </div>
+    </div>
+
+    <modal-window id="modal-window">
+        <div class="modal-content" slot="content">
+            <label class="title">title</label>
+            <p class="message">message</p>
+
+            <div class="actions-container" slot="actions">
+                <simple-button class="cancel-button" label="cancel" f-weight="bold" f-color="var(--color-a)"
+                    b-color="var(--color-red)">
+                </simple-button>
+                <simple-button class="ok-button" label="ok" f-weight="bold" f-color="var(--color-a)"
+                    b-color="var(--color-green)">
+                </simple-button>
+            </div>
+        </div>
+
+    </modal-window>
+
+    <template class="buttons-template">
+        <icon-button>
+            <div class="icon-container" slot="icon">
+                <svg width="50%" height="50%" viewBox="0 0 32 32" fill="var(--color-a)">
+                    <path
+                        d="M 12 0 L 12 12 L 0 12 L 0 20 L 12 20 L 12 32 L 20 32 L 20 20 L 32 20 L 32 12 L 20 12 L 20 0 L 12 0 z " />
+                </svg>
+            </div>
+        </icon-button>
+
+        <toggle-button class="radio-button" toggle="0">
+            <div class="icons-container" slot="icons">
+                <svg width="50%" height="50%" viewBox="0 0 64 64" fill="var(--color-overlay)">
+                    <path d="M 0,0 H 64 V 64 H 0 Z" />
+                </svg>
+                <svg width="50%" height="50%" viewBox="0 0 64 64" fill="var(--color-a)">
+                    <path d="M 0,0 H 64 V 64 H 0 Z" />
+                </svg>
+            </div>
+        </toggle-button>
+
+        <toggle-button class="checkbox-button" toggle="0">
+            <div class="icons-container" slot="icons">
+                <svg width="50%" height="50%" viewBox="0 0 44 32" fill="var(--color-overlay)">
+                    <path
+                        d="M 37.711934,-5.5296e-4 43.999992,6.1203123 17.637109,31.993887 0.00560081,14.832174 6.2936583,8.7040307 17.637109,19.723044 Z" />
+                </svg>
+                <svg width="50%" height="50%" viewBox="0 0 44 32" fill="var(--color-a)">
+                    <path
+                        d="M 37.711934,-5.5296e-4 43.999992,6.1203123 17.637109,31.993887 0.00560081,14.832174 6.2936583,8.7040307 17.637109,19.723044 Z" />
+                </svg>
+            </div>
+        </toggle-button>
+    </template>
+
+</body>
+
+</html>

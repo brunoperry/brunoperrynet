@@ -1,0 +1,92 @@
+:root {
+    --color-a: #FFF6FF;
+    --color-b: var(--color-blue);
+    --color-base: var(--color-blue);
+}
+
+body {
+    padding: 0;
+}
+
+button {
+    text-align: left;
+}
+
+#cpanel-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: scroll;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform var(--speed) ease-in-out, opacity var(--speed) ease-in-out;
+}
+#app-edit-container {
+    position: absolute;
+    display: grid;
+    inset: 0;
+    min-height: calc(100% - calc(var(--padding) * 2));
+    padding: var(--padding);
+    grid-template-areas: 
+    'editcontainer'
+    'actionscontainer';
+    grid-template-columns: 100%;
+    grid-template-rows: auto calc(var(--button-height) + var(--padding));
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--speed) ease-in-out, transform var(--speed) ease-in-out;
+    overflow: hidden;
+}
+
+#app-edit-container .actions-container{
+    padding: 0;
+    padding-top: var(--padding);
+    gap: var(--padding);
+    grid-area: actionscontainer;
+    transform: translateY(100%);
+    transition: transform var(--speed) ease-in-out;
+}
+#app-edit-container .edit-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    transform: scale(0.9);
+    transition: transform var(--speed) ease-in-out;
+    padding: var(--padding) 0;
+    grid-area: editcontainer;
+}
+#app-edit-container simple-button {
+    flex: none;
+}
+
+#delete-app-button {
+    align-self: flex-start;
+}
+.button-container toggle-button {
+    padding-left: 0;
+}
+.select-container, .input-container, .button-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+}
+.prop-label {
+    font-size: var(--s-font-size);
+    margin-bottom: 5px;
+    color: var(--color-overlay);
+}
+/* #app-edit-container input, #app-id, #app-state, #app-type {
+    margin-bottom: 40px;
+} */
+
+@media only screen and (max-width: 800px) {
+
+    /* #app-edit-container input, #app-id, #app-state, #app-type {
+        margin-bottom: 25px !important;
+    } */
+    .prop-label {
+        margin-bottom: 5px;
+    }
+}

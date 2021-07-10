@@ -1,0 +1,4 @@
+<svg width="100%" height="100%" viewBox="0 0 32 32" style="fill-rule:evenodd;clip-rule:evenodd;">
+    <path fill="#007be0" d="M 0,0 H 32 V 32 H 0 Z" />
+    <path d="M 24.000004,12 V 4.0000001 H 8.0000037 V 12 H 5.0000036 V 28.000001 H 27.000004 V 12 Z m -11,9.000001 h 6 v -6 h -6 z m -3,-9.000001 h 12 V 6.0000002 h -12 z" fill="#FFF6FF"/>
+</svg>

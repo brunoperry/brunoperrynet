@@ -1,0 +1,156 @@
+:root {
+    --color-a: #eeeeee;
+    --color-b: #303030;
+    --color-base: #303030;
+
+    --color-red: #AA0000;
+    --color-yellow: #FFB20B;
+    --color-green: #699e3a;
+    --color-blue: #007be0;
+    --color-input: #ebebebea;
+
+    --color-overlay: #0000008a;
+    --color-modal: #000000f3;
+
+    --max-width: 800px;
+    --button-height: 92px;
+    --button-scale: scale(0.9);
+
+    --avatar-size: 80%;
+
+    --padding: 20px;
+
+    --message-height: 64px;
+
+    --l-font-size: 6rem;
+    --m-font-size: 4rem;
+    --s-font-size: 2.5rem;
+    --xs-font-size: 1.6rem;
+    --font-family: Helvetica, Arial, sans-serif;
+
+    --persp: 1000px;
+    --speed: 0.20s;
+    --speed-test: 4.20s;
+}
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+*:active {
+    outline: none;
+}
+*:focus {
+    outline: none;
+}
+::-webkit-scrollbar {
+    width: 0px;
+}
+::-webkit-scrollbar-thumb, :-webkit-scrollbar-thumb:hover  {
+    background: transparent; 
+}
+::placeholder {
+    font-family: var(--font-family);
+    font-size: var(--s-font-size);
+    opacity: 0.3;
+}
+
+html, body {
+    position: relative;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    transition: background-color var(--speed) ease, opacity var(--speed) ease;
+    background-color: var(--color-base);
+    font-family: var(--font-family);
+    overflow: auto;
+}
+
+body {
+    padding: var(--padding);
+    height: auto;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    opacity: 0;
+    background-color: transparent;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding);
+    padding: var(--padding);
+}
+
+input {
+    width: auto;
+    min-height: var(--button-height);
+    height: var(--button-height);
+    border: none;
+    background-color: var(--color-input);
+    font-size: var(--m-font-size);
+}
+label {
+    display: flex;
+    align-items: center;
+    font-size: var(--m-font-size);
+    color: var(--color-a);
+    font-weight: 400;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+button {
+    width: auto;
+    height: var(--button-height);
+    max-height: var(--button-height);
+    font-size: var(--m-font-size);
+    color: var(--color-a);
+    font-weight: 400;
+    text-transform: uppercase;
+    border: none;
+    background-color: transparent;
+    padding: 0 var(--padding);
+    cursor: pointer;
+    flex: 1;
+}
+
+button:active label {
+    transform: scale(0.9);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+li {
+    display: flex;
+}
+
+.actions-container {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: var(--padding);
+}
+
+@media only screen and (max-width: 800px) {
+    :root {
+        --button-height: 64px;
+
+        --l-font-size: 3.5rem;
+        --m-font-size: 2.3rem;
+        --s-font-size: 1.5rem;
+        --xs-font-size: 1rem;
+
+        --padding: 10px;
+    }
+}

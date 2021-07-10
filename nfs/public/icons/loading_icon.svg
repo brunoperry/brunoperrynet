@@ -1,0 +1,5 @@
+<svg id="loading-icon" class="icon" width="100%" height="100%" viewBox="0 0 102 22" fill="var(--music-color-c)">
+    <path id="load-icon1" class="load-icon" d="M -1.6e-5,-1.1040363e-4 H 22.000122 V 22.000001 H -1.6e-5 Z" />
+    <path id="load-icon2" class="load-icon" d="M 39.999984,-1.1040363e-4 V 22.000001 H 62.000122 V -1.1040363e-4 Z" />
+    <path id="load-icon3" class="load-icon" d="M 79.999984,-1.1040363e-4 V 22.000001 H 102.00012 V -1.1040363e-4 Z" />
+</svg>
