@@ -402,7 +402,6 @@ class ModalWindow extends Component {
 
     show(shrinkElem = null) {
 
-        console.log(shrinkElem)
         this.shrinkElem = shrinkElem;
         if (this.shrinkElem) {
             this.shrinkElem.style.transform = 'scale3d(0.9,0.9,0.9)';

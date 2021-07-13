@@ -4,7 +4,7 @@ dotEnv.config();
 const dirTree = require('directory-tree');
 const mysql = require('mysql');
 const util = require('util');
-const App = require('./models/app_model')
+const App = require('./models/app_model');
 
 const { ensureAuthenticated } = require('./configs/auth_config');
 
@@ -18,7 +18,7 @@ const connection = mysql.createConnection({
 });
 
 const mongoose = require('mongoose');
-const { route } = require('./routes/homex_route');
+const { Console } = require('console');
 
 class SystemService {
 
@@ -33,31 +33,41 @@ class SystemService {
         await this.getAllIcons();
         await this.getAllUsers();
         await this.getAllMusic();
-        await this.initApps(server);
-
-        console.log('system ready!')
-    }
-
-    static async initApps(server) {
 
         SystemService.SERVER = server;
 
         let apps = await this.getAllApps();
-        apps = apps.filter(app => app.state !== 'inactive' && app.type !== 'system');
+        apps = apps.filter(a => a.state !== 'inactive');
+        apps = apps.filter(a => a.state !== 'deleted');
+        apps = apps.filter(a => a.type !== 'system');
         for (let i = 0; i < apps.length; i++) {
             this.addApp(await this.createApp(apps[i]));
         }
     }
 
+    static async initApps(server) {
+
+
+    }
     static addApp(app) {
 
 
-        if (app.type === 'system') return;
-
         SystemService.apps.push(app);
+
+        if (app.type !== 'webapp') return;
+
         if (app.route !== null) {
-            if (app.admin === 1) SystemService.SERVER.use(`/${app.short_name}`, ensureAuthenticated, require(`../${app.route}`));
-            else if (app.admin === 0) SystemService.SERVER.use(`/${app.short_name}`, require(`../${app.route}`));
+
+            let router;
+            if (app.admin === 1) {
+                router = require(`../${app.route}`);
+                SystemService.SERVER.use(`/${app.short_name}`, ensureAuthenticated, router);
+            }
+            else if (app.admin === 0) {
+                router = require(`../${app.route}`);
+                SystemService.SERVER.use(`/${app.short_name}`, router);
+            }
+            SystemService.routes.push(router);
         } else {
             if (app.admin === 1) SystemService.SERVER.get(`/${app.short_name}`, ensureAuthenticated, (req, res, next) => {
                 res.render(app.short_name);
@@ -66,44 +76,6 @@ class SystemService {
                 res.render(app.short_name);
             });
         }
-    }
-    static async removeApp(appData) {
-
-        return;
-
-        console.log(SystemService.SERVER._router.stack)
-
-        let routes = [];
-        SystemService.SERVER._router.stack.forEach(layer => {
-
-            if (!layer) return;
-            if (layer && !layer.match(`/${appData.short_name}`)) return;
-            if (['query', 'expressInit'].indexOf(layer.name) != -1) return;
-
-            console.log(layer.name)
-            if (layer.name == 'router') {
-                // routes = routes.concat(_findRoute(trimPrefix(path, layer.path), layer.handle.stack));
-            } else {
-                if (layer.name == 'bound ') {
-                    // routes.push({ route: layer || null, stack: stack });
-                }
-            }
-
-            // if (layer.path === `/${appData.short_name}`) {
-
-            // break;
-            // }
-        });
-        return routes;
-
-        /**
-        for (k in self.app.routes.get) {
-            if (self.app.routes.get[k].path + "" === route + "") {
-              self.app.routes.get.splice(k,1);
-              break;
-            }
-          }
-           */
     }
 
     static async getAllApps() {
@@ -246,17 +218,13 @@ module.exports = ${appData.name}Model;
 
         return appOut;
     }
-
     static async deleteApp(appData) {
 
         try {
-            await this.removeApp(appData);
 
-            return true;
+            await connection.query(`UPDATE apps SET state='deleted' WHERE id=${appData.id};`);
 
-            await connection.query(`
-            DELETE FROM apps WHERE id = ?
-            `, [appData.appID]);
+            SystemService.apps = SystemService.apps.filter(a => a.id !== appData.id);
 
             let filePath = `./nfs/brunoperry_net/src/views/${appData.short_name}.ejs`;
             if (await this.fileExists(filePath)) await fs.unlinkSync(filePath);
@@ -276,7 +244,6 @@ module.exports = ${appData.name}Model;
             filePath = `./nfs/brunoperry_net/src/models/${appData.short_name}_model.js`;
             if (await this.fileExists(filePath)) await fs.unlinkSync(filePath);
 
-            await this.removeApp(appData);
 
             return true;
         } catch (error) {
@@ -361,6 +328,7 @@ module.exports = ${appData.name}Model;
 SystemService.icons = [];
 SystemService.music = [];
 SystemService.apps = [];
+SystemService.routes = [];
 SystemService.users = [];
 SystemService.SERVER = null;
 

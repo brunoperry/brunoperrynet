@@ -2,7 +2,7 @@
     "watch": [
         "src/"
     ],
-    "igonre": [
+    "ignore": [
         "nfs/brunoperry_net"
     ]
 }

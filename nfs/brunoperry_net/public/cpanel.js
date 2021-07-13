@@ -31,8 +31,6 @@ class CPanelView extends View {
             let req = await fetch('/cpanel/getapps');
             let res = await req.json();
 
-            console.log(res)
-
             let addButton = document.querySelector('.buttons-template').content.cloneNode(true).querySelector('icon-button');
             addButton.setAttribute('label', 'new app');
             res.push({
@@ -265,12 +263,10 @@ window.onload = async () => {
                         if (e === 'ok') {
                             const req = await fetch('/cpanel/deleteapp', {
                                 method: 'POST',
-                                body: JSON.stringify({ appID: appEditView.data.id, name: appEditView.data.name }),
+                                body: JSON.stringify(appEditView.data),
                                 headers: { "Content-Type": "application/json" }
                             });
-                            console.log('lwke')
                             const res = await req.json();
-                            console.log(res)
 
                             let addButton = document.querySelector('.buttons-template').content.cloneNode(true).querySelector('icon-button');
                             addButton.setAttribute('label', 'new app');
