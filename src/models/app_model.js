@@ -1,13 +1,7 @@
 class AppModel {
     constructor(data) {
 
-        this.id = data.id;
-        this.name = data.name;
-        this.short_name = data.short_name;
-        this.url = data.url;
-        this.state = data.state;
-        this.type = data.type;
-        this.admin = data.admin;
+        this.update(data);
 
         this.icon = null;
 
@@ -15,6 +9,16 @@ class AppModel {
         this.controller = null;
         this.model = null;
         this.config = null;
+    }
+
+    update(appData) {
+        this.id = appData.id;
+        this.name = appData.name;
+        this.short_name = appData.short_name;
+        this.url = `${appData.url}`;
+        this.state = appData.state;
+        this.type = appData.type;
+        this.admin = appData.admin;
     }
 }
 const App = AppModel;

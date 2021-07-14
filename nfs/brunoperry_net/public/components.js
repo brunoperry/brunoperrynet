@@ -331,11 +331,8 @@ class SelectGroup extends Component {
                 if (this.groupType === 'singlechoice') {
                     if (this.currentItem) this.currentItem.toggle();
                     this.currentItem = btn;
-                } else {
-
                 }
                 this.dispatchEvent(new CustomEvent(SelectGroup.Events.CHANGED), { bubbles: true, detail: itemData });
-                console.log('clicked')
             });
             this.groupContainer.appendChild(btn);
         };

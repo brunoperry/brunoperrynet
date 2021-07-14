@@ -5,6 +5,7 @@ const dirTree = require('directory-tree');
 const mysql = require('mysql');
 const util = require('util');
 const App = require('./models/app_model');
+const removeRoute = require('express-remove-route');
 
 const { ensureAuthenticated } = require('./configs/auth_config');
 
@@ -18,7 +19,6 @@ const connection = mysql.createConnection({
 });
 
 const mongoose = require('mongoose');
-const { Console } = require('console');
 
 class SystemService {
 
@@ -45,10 +45,6 @@ class SystemService {
         }
     }
 
-    static async initApps(server) {
-
-
-    }
     static addApp(app) {
 
 
@@ -58,16 +54,13 @@ class SystemService {
 
         if (app.route !== null) {
 
-            let router;
+            let router = require(`../${app.route}`);
             if (app.admin === 1) {
-                router = require(`../${app.route}`);
                 SystemService.SERVER.use(`/${app.short_name}`, ensureAuthenticated, router);
             }
             else if (app.admin === 0) {
-                router = require(`../${app.route}`);
                 SystemService.SERVER.use(`/${app.short_name}`, router);
             }
-            SystemService.routes.push(router);
         } else {
             if (app.admin === 1) SystemService.SERVER.get(`/${app.short_name}`, ensureAuthenticated, (req, res, next) => {
                 res.render(app.short_name);
@@ -93,7 +86,9 @@ class SystemService {
     }
     static async saveApp(appData) {
         try {
-            let result = await connection.query(`SELECT * FROM apps WHERE short_name='${appData.short_name}'`);
+            let result = await connection.query(`SELECT * FROM apps WHERE id='${appData.id}'`);
+
+            let nApp;
             if (result.length > 0) {
                 result = await connection.query(`
                 UPDATE apps 
@@ -104,13 +99,19 @@ class SystemService {
                 type = ?,
                 admin = ?
                 WHERE id = ${appData.id};
-                `, [appData.name, appData.short_name, appData.url, appData.state, appData.type, appData.admin])
+                `, [appData.name, appData.short_name, appData.url, appData.state, appData.type, appData.admin]);
+
+                const remRoute = removeRoute(SystemService.SERVER, appData.url);
+                nApp = await this.createApp(appData);
+                this.addApp(nApp);
             } else {
-                await connection.query(`
+                const saveRes = await connection.query(`
                     INSERT INTO apps 
                     (name, short_name, url, state, type, admin)
                     VALUES (?,?,?,?,?,?);
                     `, [appData.name, appData.short_name, appData.url, appData.state, appData.type, appData.admin]);
+
+                appData.id = saveRes.insertId;
 
                 const viewData = `
 <!DOCTYPE html>
@@ -191,7 +192,8 @@ module.exports = ${appData.name}Model;
                     fs.writeFileSync(tmpURL, modelScript);
                 }
 
-                this.addApp(this.createApp(appData));
+                nApp = await this.createApp(appData);
+                this.addApp(nApp);
             }
             return true;
         } catch (error) {
@@ -224,25 +226,29 @@ module.exports = ${appData.name}Model;
 
             await connection.query(`UPDATE apps SET state='deleted' WHERE id=${appData.id};`);
 
+            const binPath = `./nfs/brunoperry_net/recycle_bin/${Date.now()}_`;
+
             SystemService.apps = SystemService.apps.filter(a => a.id !== appData.id);
+            const rem = removeRoute(SystemService.SERVER, `/${appData.url}`);
+            console.log(`${appData.name} route removed`, rem)
 
             let filePath = `./nfs/brunoperry_net/src/views/${appData.short_name}.ejs`;
-            if (await this.fileExists(filePath)) await fs.unlinkSync(filePath);
+            if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}.ejs`);
 
             filePath = `./nfs/brunoperry_net/public/${appData.short_name}.js`;
-            if (await this.fileExists(filePath)) await fs.unlinkSync(filePath);
+            if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}.js`);
 
             filePath = `./nfs/brunoperry_net/public/${appData.short_name}.css`;
-            if (await this.fileExists(filePath)) await fs.unlinkSync(filePath);
+            if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}.css`);
 
             filePath = `./nfs/brunoperry_net/src/routes/${appData.short_name}_route.js`;
-            if (await this.fileExists(filePath)) await fs.unlinkSync(filePath);
+            if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}._route.js`);
 
             filePath = `./nfs/brunoperry_net/src/controllers/${appData.short_name}_controller.js`;
-            if (await this.fileExists(filePath)) await fs.unlinkSync(filePath);
+            if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}_controller.js`);
 
             filePath = `./nfs/brunoperry_net/src/models/${appData.short_name}_model.js`;
-            if (await this.fileExists(filePath)) await fs.unlinkSync(filePath);
+            if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}_model.js`);
 
 
             return true;
@@ -291,7 +297,6 @@ module.exports = ${appData.name}Model;
             console.error('error getting all music', error);
         }
     }
-
     static async startMariaDB() {
         connection.connect(error => {
             if (error) throw error;
@@ -328,7 +333,6 @@ module.exports = ${appData.name}Model;
 SystemService.icons = [];
 SystemService.music = [];
 SystemService.apps = [];
-SystemService.routes = [];
 SystemService.users = [];
 SystemService.SERVER = null;
 

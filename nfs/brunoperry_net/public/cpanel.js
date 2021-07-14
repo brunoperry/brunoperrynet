@@ -235,6 +235,7 @@ window.onload = async () => {
                                 action: 'newapp',
                                 buttonElem: addButton
                             });
+
                             cpanelView.updateApps(res.data);
                             if (res.success) {
                                 Animation.swapViews(appEditView, cpanelView);
