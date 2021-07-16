@@ -11,5 +11,6 @@ router.post('/saveapp', ensureAuthenticated, cpanelController.saveApp);
 router.post('/deleteapp', ensureAuthenticated, cpanelController.deleteApp);
 router.get('/getapps', ensureAuthenticated, cpanelController.getApps);
 router.get('/getusers', ensureAuthenticated, cpanelController.getUsers);
+router.get('/restart', ensureAuthenticated, cpanelController.restartServer);
 
 module.exports = router;

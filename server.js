@@ -34,9 +34,9 @@ const startServer = async (port = 3000) => {
     await SystemService.initSystem(app);
     app.use((req, res, next) => res.status(404).send(res.render('404')));
 
-    app.listen(port, () => {
-        console.log(`Server started at port:${port}!`);
-    });
+    SystemService.startServer(port);
+
+
 }
 
 const stopServer = () => {

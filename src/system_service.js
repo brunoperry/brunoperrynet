@@ -5,7 +5,6 @@ const dirTree = require('directory-tree');
 const mysql = require('mysql');
 const util = require('util');
 const App = require('./models/app_model');
-const removeRoute = require('express-remove-route');
 
 const { ensureAuthenticated } = require('./configs/auth_config');
 
@@ -40,15 +39,33 @@ class SystemService {
         apps = apps.filter(a => a.state !== 'inactive');
         apps = apps.filter(a => a.state !== 'deleted');
         apps = apps.filter(a => a.type !== 'system');
+
+        const router = SystemService.SERVER._router.stack;
         for (let i = 0; i < apps.length; i++) {
-            this.addApp(await this.createApp(apps[i]));
+            this.addAppToServer(await this.createApp(apps[i]));
         }
+
+        return;
+
+        let routes = [];
+        router.forEach(function (middleware) {
+            if (middleware.route) { // routes registered directly on the app
+                routes.push(middleware.route);
+            } else if (middleware.name === 'router') { // router middleware 
+                middleware.handle.stack.forEach(function (handler) {
+                    let route = handler.route;
+                    route && routes.push(route);
+                });
+            }
+        });
+
+        console.log(routes)
     }
 
-    static addApp(app) {
-
+    static addAppToServer(app) {
 
         SystemService.apps.push(app);
+
 
         if (app.type !== 'webapp') return;
 
@@ -86,6 +103,8 @@ class SystemService {
     }
     static async saveApp(appData) {
         try {
+
+            console.log(appData)
             let result = await connection.query(`SELECT * FROM apps WHERE id='${appData.id}'`);
 
             let nApp;
@@ -101,9 +120,6 @@ class SystemService {
                 WHERE id = ${appData.id};
                 `, [appData.name, appData.short_name, appData.url, appData.state, appData.type, appData.admin]);
 
-                const remRoute = removeRoute(SystemService.SERVER, appData.url);
-                nApp = await this.createApp(appData);
-                this.addApp(nApp);
             } else {
                 const saveRes = await connection.query(`
                     INSERT INTO apps 
@@ -193,7 +209,7 @@ module.exports = ${appData.name}Model;
                 }
 
                 nApp = await this.createApp(appData);
-                this.addApp(nApp);
+                this.addAppToServer(nApp);
             }
             return true;
         } catch (error) {
@@ -229,8 +245,6 @@ module.exports = ${appData.name}Model;
             const binPath = `./nfs/brunoperry_net/recycle_bin/${Date.now()}_`;
 
             SystemService.apps = SystemService.apps.filter(a => a.id !== appData.id);
-            const rem = removeRoute(SystemService.SERVER, `/${appData.url}`);
-            console.log(`${appData.name} route removed`, rem)
 
             let filePath = `./nfs/brunoperry_net/src/views/${appData.short_name}.ejs`;
             if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}.ejs`);
@@ -327,6 +341,25 @@ module.exports = ${appData.name}Model;
         } catch {
             return false;
         }
+    }
+
+    static async restartServer() {
+        await SystemService.execShellCommand('pm2 restart 0');
+    }
+
+    static async startServer(port) {
+        SystemService.SERVER.listen(port, () => {
+            console.log(`Server started at port:${port}!`);
+        });
+    }
+    static async stopServer() {
+        SystemService.SERVER.close();
+
+    }
+
+    static async execShellCommand(cmd) {
+        const exec = require("child_process").exec;
+        exec(cmd);
     }
 }
 

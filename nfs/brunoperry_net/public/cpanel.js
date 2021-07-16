@@ -24,6 +24,8 @@ class CPanelView extends View {
 
         this.appList = null;
         this.usersList = null;
+
+        this.testList = null;
     }
 
     async init() {
@@ -39,18 +41,18 @@ class CPanelView extends View {
             })
 
             this.appList = document.querySelector('#apps-list');
+            this.updateApps(res);
             this.appList.addEventListener(ExpandableList.Events.CLICK, e => {
                 this.callback({
                     action: 'onappschange',
                     appData: e.detail
                 });
             });
-            this.updateApps(res)
 
             req = await fetch('/cpanel/getusers');
             res = await req.json();
             this.usersList = document.querySelector('#users-list');
-            this.usersList.buildList(res);
+            this.updateUsers(res);
             this.usersList.addEventListener(ExpandableList.Events.CLICK, e => {
                 this.callback({
                     action: 'onuserschange',
@@ -61,7 +63,20 @@ class CPanelView extends View {
             this.appList.addEventListener(ExpandableList.Events.EXPANDED, () => this.usersList.collapse(true));
             this.usersList.addEventListener(ExpandableList.Events.EXPANDED, () => this.appList.collapse(true));
 
+            this.view.querySelector('#restart-button').addEventListener(Component.Events.CLICK, e => {
+                this.callback({
+                    action: 'restart'
+                });
+            })
+
+
             this.show();
+
+            const items = this.view.children;
+            for (let i = 0; i < items.length; i++) {
+                const itm = items[i];
+                itm.style.opacity = 0;
+            }
 
         } catch (error) {
             console.error(error)
@@ -73,18 +88,32 @@ class CPanelView extends View {
     }
 
     updateUsers(usersData) {
-
+        this.usersList.buildList(usersData);
     }
 
     show() {
         super.show();
-        this.view.style.transform = 'scale(1)';
+
+        const items = this.view.children;
+        let i = 0;
+        let intervalID = setInterval(() => {
+            items[i].style.opacity = 1;
+            i++;
+            if (i >= items.length) {
+                clearInterval(intervalID);
+            }
+        }, 70);
     }
     hide() {
         this.view.style.opacity = 0;
         this.view.style.transform = 'scale(0.9)';
         setTimeout(() => {
             super.hide();
+            this.view.style.transform = 'scale(1)';
+            const items = this.view.children;
+            for (let i = 0; i < items.length; i++) {
+                items[i].style.opacity = 0;
+            }
         }, Component.SPEED)
     }
 }
@@ -188,7 +217,7 @@ window.onload = async () => {
 
     Component.SPEED = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--speed').replace('s', '')) * 1000;
 
-    cpanelView = new CPanelView(e => {
+    cpanelView = new CPanelView(async e => {
 
         switch (e.action) {
             case 'onappschange':
@@ -202,6 +231,34 @@ window.onload = async () => {
                 break;
             case 'onuserschange':
                 currentView = appEditView;
+                break;
+            case 'restart':
+                modalWindow.setData({
+                    title: `Warning!`,
+                    message: 'Restart the server?',
+                    actions: 'cancel ok',
+                    callback: async e => {
+                        if (e === 'ok') {
+                            try {
+                                modalWindow.setData({
+                                    title: `Restarting!`,
+                                    message: 'Please wait...',
+                                    actions: ''
+                                })
+                                setTimeout(() => {
+                                    window.location = '/'
+                                }, 2000);
+                                fetch('/cpanel/restart');
+                            } catch (error) {
+                                console.log('error')
+
+                            }
+                        } else {
+                            modalWindow.hide();
+                        }
+                    }
+                });
+                modalWindow.show(cpanelView.view);
                 break;
             default:
                 break;
@@ -303,7 +360,6 @@ window.onload = async () => {
 
 
     document.body.style.opacity = 1;
-    document.querySelector('#cpanel-container').style.transform = 'scale(1)';
 }
 
 const onAppChange = data => {

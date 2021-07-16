@@ -174,6 +174,55 @@ class ToggleButton extends SimpleButton {
 }
 customElements.define('toggle-button', ToggleButton);
 
+
+class SimpleList extends Component {
+
+    constructor() {
+        super(`
+        <slot name="list"></slot>
+    `);
+
+        this.list = null;
+        this.currentItem = null;
+    }
+
+    buildList(listData) {
+
+        this.list.innerHTML = '';
+
+        listData.forEach(item => {
+            console.log(item);
+            const btn = document.createElement('simple-button');
+            btn.addEventListener(Component.Events.CLICK, e => {
+                this.currentItem = btn;
+                this.dispatchEvent(new CustomEvent(SimpleList.Events.CLICK, {
+                    bubbles: true,
+                    detail: this.value
+                }));
+            });
+
+            this.list.appendChild(btn);
+        });
+    }
+
+    connectedCallback() {
+
+        this.list = document.createElement('ul');
+        this.list.setAttribute('slot', 'list');
+        this.appendChild(this.list);
+
+        console.log(this)
+        setTimeout(() => {
+            super.connectedCallback();
+        }, 10);
+    }
+
+    get value() { return this.currentItem.value }
+}
+SimpleList.Events = {
+    CLICK: 'simplelisteventsclick'
+}
+customElements.define('simple-list', SimpleList);
 class ExpandableList extends Component {
 
     constructor() {

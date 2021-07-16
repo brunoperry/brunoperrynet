@@ -51,3 +51,9 @@ exports.getUsers = async (req, res) => {
     }
     res.send(SystemService.users);
 }
+
+exports.restartServer = async (req, res) => {
+
+    if (!req.user) return false;
+    SystemService.restartServer();
+}

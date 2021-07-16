@@ -19,7 +19,6 @@ button {
     flex-direction: column;
     flex: 1;
     overflow-y: scroll;
-    transform: scale(0.9);
     opacity: 0;
     transition: transform var(--speed) ease-in-out, opacity var(--speed) ease-in-out;
 }
