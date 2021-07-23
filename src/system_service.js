@@ -44,30 +44,14 @@ class SystemService {
         for (let i = 0; i < apps.length; i++) {
             this.addAppToServer(await this.createApp(apps[i]));
         }
-
-        return;
-
-        let routes = [];
-        router.forEach(function (middleware) {
-            if (middleware.route) { // routes registered directly on the app
-                routes.push(middleware.route);
-            } else if (middleware.name === 'router') { // router middleware 
-                middleware.handle.stack.forEach(function (handler) {
-                    let route = handler.route;
-                    route && routes.push(route);
-                });
-            }
-        });
-
-        console.log(routes)
     }
 
     static addAppToServer(app) {
 
         SystemService.apps.push(app);
 
-
         if (app.type !== 'webapp') return;
+
 
         if (app.route !== null) {
 
@@ -146,21 +130,23 @@ ${appData.name}
 </body>
 </html>
 `;
-                fs.writeFileSync(`./nfs/brunoperry_net/src/views/${appData.name}.ejs`, viewData);
+                fs.writeFileSync(`${process.env.BP_SRC_PATH}/views/${appData.name}.ejs`, viewData);
 
                 const viewStyle = `
 #${appData.name}-container {
     display: flex;
 }
 `;
-                fs.writeFileSync(`./nfs/brunoperry_net/public/${appData.name}.css`, viewStyle);
+
+
+                fs.writeFileSync(`${process.env.BP_PUBLIC_PATH}/${appData.name}.css`, viewStyle);
 
                 const viewScript = `
 window.onload = () => {
     document.body.style.opacity = 1;
 }
 `;
-                fs.writeFileSync(`./nfs/brunoperry_net/public/${appData.name}.js`, viewScript);
+                fs.writeFileSync(`${process.env.BP_PUBLIC_PATH}/${appData.name}.js`, viewScript);
 
                 let tmpURL;
                 let routeScript;
@@ -171,7 +157,7 @@ exports.index = async (req, res, next) => {
     res.render('${appData.name}');
 }
 `;
-                    tmpURL = `./nfs/brunoperry_net/src/controllers/${appData.name}_controller.js`;
+                    tmpURL = `${process.env.BP_SRC_PATH}/controllers/${appData.name}_controller.js`;
                     fs.writeFileSync(tmpURL, controllerScript);
 
                     routeScript = `
@@ -191,7 +177,7 @@ module.exports = router;
 `;
                 }
 
-                tmpURL = `./nfs/brunoperry_net/src/routes/${appData.name}_route.js`;
+                tmpURL = `${process.env.BP_SRC_PATH}/routes/${appData.name}_route.js`;
                 fs.writeFileSync(tmpURL, routeScript);
 
                 if (appData.components[1] === 1) {
@@ -204,7 +190,7 @@ class ${appData.name}Model {
 }
 module.exports = ${appData.name}Model;
 `;
-                    tmpURL = `./nfs/brunoperry_net/src/models/${appData.name}_model.js`;
+                    tmpURL = `${process.env.BP_SRC_PATH}/models/${appData.name}_model.js`;
                     fs.writeFileSync(tmpURL, modelScript);
                 }
 
@@ -225,13 +211,13 @@ module.exports = ${appData.name}Model;
         if (appOut.icon) appOut.icon = appOut.icon.data;
         else appOut.icon = this.getIconByName('default').data;
 
-        let tmpName = `./nfs/brunoperry_net/src/routes/${appData.short_name}_route.js`;
+        let tmpName = `${process.env.BP_SRC_PATH}/routes/${appData.short_name}_route.js`;
         if (await this.fileExists(tmpName)) appOut.route = tmpName;
 
-        tmpName = `./nfs/brunoperry_net/src/controller/${appData.short_name}_controller.js`;
+        tmpName = `${process.env.BP_SRC_PATH}/controller/${appData.short_name}_controller.js`;
         if (await this.fileExists(tmpName)) appOut.controller = tmpName;
 
-        tmpName = `./nfs/brunoperry_net/src/models/${appData.short_name}_model.js`;
+        tmpName = `${process.env.BP_SRC_PATH}/models/${appData.short_name}_model.js`;
         if (await this.fileExists(tmpName)) appOut.model = tmpName;
 
         return appOut;
@@ -242,26 +228,26 @@ module.exports = ${appData.name}Model;
 
             await connection.query(`UPDATE apps SET state='deleted' WHERE id=${appData.id};`);
 
-            const binPath = `./nfs/brunoperry_net/recycle_bin/${Date.now()}_`;
+            const binPath = `${process.env.BP_RECYCLE_BIN_PATH}/${Date.now()}_`;
 
             SystemService.apps = SystemService.apps.filter(a => a.id !== appData.id);
 
-            let filePath = `./nfs/brunoperry_net/src/views/${appData.short_name}.ejs`;
+            let filePath = `${process.env.BP_SRC_PATH}/views/${appData.short_name}.ejs`;
             if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}.ejs`);
 
-            filePath = `./nfs/brunoperry_net/public/${appData.short_name}.js`;
+            filePath = `${process.env.BP_PUBLIC_PATH}/${appData.short_name}.js`;
             if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}.js`);
 
-            filePath = `./nfs/brunoperry_net/public/${appData.short_name}.css`;
+            filePath = `${process.env.BP_PUBLIC_PATH}/${appData.short_name}.css`;
             if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}.css`);
 
-            filePath = `./nfs/brunoperry_net/src/routes/${appData.short_name}_route.js`;
+            filePath = `${process.env.BP_SRC_PATH}/routes/${appData.short_name}_route.js`;
             if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}._route.js`);
 
-            filePath = `./nfs/brunoperry_net/src/controllers/${appData.short_name}_controller.js`;
+            filePath = `${process.env.BP_SRC_PATH}/controllers/${appData.short_name}_controller.js`;
             if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}_controller.js`);
 
-            filePath = `./nfs/brunoperry_net/src/models/${appData.short_name}_model.js`;
+            filePath = `${process.env.BP_SRC_PATH}/models/${appData.short_name}_model.js`;
             if (await this.fileExists(filePath)) await fs.renameSync(filePath, `${binPath}${appData.short_name}_model.js`);
 
 
@@ -282,7 +268,7 @@ module.exports = ${appData.name}Model;
     static async getAllIcons() {
         try {
             SystemService.icons = [];
-            const iconsData = dirTree('nfs/public/icons');
+            const iconsData = dirTree(process.env.BP_ICONS_PATH);
             for (let i = 0; i < iconsData.children.length; i++) {
                 const ico = iconsData.children[i];
                 SystemService.icons.push({
@@ -302,7 +288,24 @@ module.exports = ${appData.name}Model;
     static async getAllMusic() {
         try {
             const radios = await connection.query('SELECT * FROM radios');
-            const music = dirTree('nfs/public/music/');
+            let music = await dirTree(process.env.BP_MUSIC_PATH);
+
+            const data = fs.readFileSync('./src/databases.json');
+            music = JSON.parse(data);
+
+            const cleanData = data => {
+                data.path = data.path.replace('./nfs/public', '');
+                data.path = data.path.replace('nfs/public', '');
+                if (data.children)
+                    for (let i = 0; i < data.children.length; i++) {
+                        cleanData(data.children[i]);
+                    }
+                else {
+                    data.name = data.name.replace('.mp3', '');
+                }
+            }
+            cleanData(music);
+
             SystemService.music = {
                 radios: radios,
                 music: music

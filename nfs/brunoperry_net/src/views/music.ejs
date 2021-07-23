@@ -5,11 +5,120 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/components.css">
+    <link rel="stylesheet" href="/styles/music.css">
+    <script src="/scripts/components.js"></script>
+    <script src="/scripts/music.js"></script>
     <title>Music</title>
 </head>
 
 <body>
-    music
+    <div id="info-container">
+        <div id="info-content">
+
+        </div>
+        <simple-button id="info-button" label="INFO" t-align="center" f-weight="bold" b-color="var(--color-b)">
+        </simple-button>
+    </div>
+    <div id="music-container">
+        <div id="controls-container">
+
+            <icon-button id="previous-button">
+                <div class="icon-container" slot="icon">
+                    <svg slot="icon" width="50%" height="60%" viewBox="0 0 32 40" fill="var(--color-a)">
+                        <path
+                            d="M 6.8295316,21.902248 V 39.935354 H 0.0010124 V -2.56e-4 H 6.8295316 V 18.161733 L 32.000482,0.06436708 V 39.999977 Z" />
+                    </svg>
+                </div>
+            </icon-button>
+
+            <div id="action-button">
+                <icon-button id="play-button" class="action-button">
+                    <div class="icon-container" slot="icon">
+                        <svg slot="icon" width="100%" height="100%" viewBox="0 0 102 102" fill="var(--color-a)">
+                            <path d="M 101.95107,50.979868 -2.4775e-5,101.95922 V 0.0081228 Z" />
+                        </svg>
+                    </div>
+                </icon-button>
+                <icon-button id="pause-button" class="action-button">
+                    <div class="icon-container" slot="icon">
+                        <svg slot="icon" width="100%" height="100%" viewBox="0 0 102 102" fill="var(--color-a)">
+                            <path d="M 0,0 H 42 V 102 H 0 Z" />
+                            <path d="M 59.999999,0 H 102 V 102 H 59.999999 Z" />
+                        </svg>
+                    </div>
+                </icon-button>
+                <div id="loading-button" class="action-button">
+                    <svg width="100%" height="100%" viewBox="0 0 102 22" fill="var(--color-overlay)">
+                        <path id="load-icon1" class="load-icon"
+                            d="M -1.6e-5,-1.1040363e-4 H 22.000122 V 22.000001 H -1.6e-5 Z" />
+                        <path id="load-icon2" class="load-icon"
+                            d="M 39.999984,-1.1040363e-4 V 22.000001 H 62.000122 V -1.1040363e-4 Z" />
+                        <path id="load-icon3" class="load-icon"
+                            d="M 79.999984,-1.1040363e-4 V 22.000001 H 102.00012 V -1.1040363e-4 Z" />
+                    </svg>
+                </div>
+                <div id="error-button" class="action-button">
+                    <svg width="100%" height="60%" viewBox="0 0 40 40" fill="var(--color-red)">
+                        <path
+                            d="M 20.001551,13.12699 32.728864,0.00193 40.000834,7.5025687 27.879517,20.002693 40.000834,32.501406 32.728864,40.002045 20.001551,26.876985 7.274237,40.002045 9e-4,32.501406 12.122216,20.002693 9e-4,7.5025687 7.274237,0.00193 Z" />
+                    </svg>
+                </div>
+            </div>
+
+            <icon-button id="next-button">
+                <div class="icon-container" slot="icon">
+                    <svg slot="icon" width="50%" height="60%" viewBox="0 0 32 40" fill="var(--color-a)">
+                        <path
+                            d="m 25.171963,0.0643667 h 6.828519 V 39.999977 H 25.171963 V 21.837988 L 0.0010127,39.935354 V -2.563e-4 L 25.171963,18.097473 Z" />
+                    </svg>
+                </div>
+            </icon-button>
+
+        </div>
+        <range-slider id="scrubb" min="0" max="100" value="30" f-size="var(--xs-font-size)" f-weight="bold" label-on>
+        </range-slider>
+        <range-slider id="volume" min="0" max="100" f-size="var(--xl-font-size)" f-weight="bold"></range-slider>
+    </div>
+    <div id="menu-container">
+
+        <mobile-menu id="menu">
+            <toggle-button slot="button" id="menu-button">
+                <div class="icons-container" slot="icons">
+                    <svg width="100%" height="60%" viewBox="0 0 38 40" fill="var(--color-a)">
+                        <path d="M 0.00236708,9.2252924 H 38.002538 V -6.7465529e-4 H 0.00236708 Z" />
+                        <path d="M 0.00236666,24.612142 H 38.002538 V 15.386175 H 0.00236666 Z" />
+                        <path d="M 0.00236708,40.000022 H 38.002538 V 30.774055 H 0.00236708 Z" />
+                    </svg>
+                    <svg width="100%" height="60%" viewBox="0 0 32 53.333334" fill="var(--color-a)">
+                        <path
+                            d="m -10.666667,44.000427 9.332904,9.332905 17.33377,-17.333758 17.333763,17.33376 9.3329,-9.332904 L 25.33291,26.666666 42.66667,9.3328957 33.33377,-6.33e-6 15.999997,17.33376 -1.333763,-2.33e-6 -10.666663,9.3328937 6.667097,26.666667 Z" />
+                    </svg>
+                </div>
+            </toggle-button>
+            <bread-crumb slot="breadcrumb"></bread-crumb>
+        </mobile-menu>
+    </div>
+
+    <template id="items-template">
+        <icon-button class="list-item">
+            <div class="icon-container" slot="icon">
+                <svg width="50%" height="50%" viewBox="0 0 16.933333 16.933334" fill="var(--color-a)" slot="icon">
+                    <path
+                        d="M 8.4643154,2.4999999e-7 5.5005933,2.9637193 11.003537,8.4666675 5.5005933,13.969613 8.4643154,16.933333 16.933333,8.4652654 Z" />
+                </svg>
+            </div>
+        </icon-button>
+        <icon-button class="breadcrumb-item">
+            <div class="icon-container" slot="icon">
+                <svg width="50%" height="50%" viewBox="0 0 64 64" fill="var(--color-b)">
+                    <path d="M 0,0 H 64 V 64 H 0 Z" />
+                </svg>
+            </div>
+        </icon-button>
+        <simple-button></simple-button>
+    </template>
 </body>
 
 </html>

@@ -1,0 +1,261 @@
+simple-button {
+    display: flex;
+    align-items: center;
+    min-height: var(--button-height);
+    height: var(--button-height);
+    padding: 0 var(--padding);
+    flex: 1;
+    cursor: pointer;
+}
+simple-button label {
+    text-align: center;
+}
+
+icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--button-height);
+    padding: 0 var(--padding);
+    flex: 1;
+    cursor: pointer;
+}
+icon-button label {
+    display: block;
+    width: 100%
+}
+icon-button .icon-container {
+    width: var(--button-height);
+    height: var(--button-height);
+    justify-content: flex-end;
+}
+
+toggle-button {
+    display: flex;
+    justify-content: space-between;
+    height: var(--button-height);
+    cursor: pointer;
+    opacity: 0;
+    padding: 0 var(--padding);
+    transition: opacity var(--speed) in-out;
+}
+toggle-button label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+toggle-button:hover label, 
+toggle-button:hover svg, 
+icon-button:hover label, 
+icon-button:hover svg, 
+simple-button:hover label {
+    transform: scale(1.05);
+}
+toggle-button:active label, 
+toggle-button:active svg, 
+icon-button:active label, 
+icon-button:active svg, 
+simple-button:active label {
+    transform: scale(0.95);
+}
+toggle-button .icons-container {
+    width: var(--button-height);
+    height: var(--button-height);
+    justify-content: flex-end;
+}
+simple-list {
+    overflow-y: scroll;
+    flex: 1;
+}
+
+expandable-list ul {
+    height: 0;
+    padding-left: var(--padding);
+    background-color: var(--color-overlay);
+    transition: height var(--speed) ease-in-out;
+    overflow: hidden;
+}
+
+select-group .select-group-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+select-group label {
+    font-weight: 100;
+    text-transform: capitalize;
+    font-size: var(--s-font-size);
+    text-align: right;
+}
+
+modal-window {
+
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    inset: 0;
+    transform: scale3d(0,0,0);
+    visibility: hidden;
+    transition: transform var(--speed) ease-in-out;
+    background-color: var(--color-a);
+
+}
+modal-window .modal-content {
+    display: grid;
+    min-width: 70%;
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto var(--button-height);
+    grid-template-areas: 
+    'title'
+    'message'
+    'actions';
+    background-color: var(--color-a);
+    padding: var(--padding);
+    opacity: 0;
+
+}
+modal-window .title {
+    color: var(--color-b);
+    grid-area: title;
+    font-weight: bold;
+}
+modal-window .message {
+    color: var(--color-b);
+    font-size: var(--s-font-size);
+    grid-area: message;
+}
+modal-window .actions-container {
+    gap: var(--padding);
+    grid-area: actions;
+}
+modal-window simple-button {
+    justify-content: center;
+}
+
+range-slider {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    overflow: auto;
+    cursor: pointer;
+}
+range-slider input {
+    flex: 1;
+    min-height: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+range-slider div {
+    position: absolute;
+    flex: 1;
+    height: 100%;
+    width: 50%;
+    background-color: var(--color-a);
+    pointer-events: none;
+}
+
+range-slider .range-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    color: var(--color-base);
+    mix-blend-mode: overlay;
+}
+
+mobile-menu {
+    display: flex;
+    flex: 1;
+}
+mobile-menu .list-container{
+    position: absolute;
+    inset: 0;
+    bottom: var(--button-height);
+    background-color: var(--color-base);
+    transition: transform var(--speed) ease-in-out;
+    transform: translateY(100%);
+    overflow: hidden;
+}
+mobile-menu simple-list {
+    position: absolute;
+    inset: 0;
+    transform: translateX(100%);
+    transition: transform var(--speed) ease-in-out;
+}
+mobile-menu icon-button {
+    overflow: auto;
+}
+bread-crumb {
+    position: absolute;
+    display: flex;
+    transform: translateY(-100%);
+    transition: transform var(--speed) ease-in-out;
+    background-color: var(--color-a);
+    height: var(--button-height);
+    top: 0;
+    width: 100%;
+}
+bread-crumb label{
+    color: var(--color-b);
+    font-size: var(--xs-font-size);
+    font-weight: bold;
+    font-style: italic;
+    min-width: 20%;
+    display: block;
+    align-self: center;
+}
+bread-crumb icon-button{
+    margin: 0;
+    padding: 0;
+    width: 48px;
+    height: 48px;
+}
+bread-crumb icon-button .icon-container{
+    justify-content: center;
+}
+bread-crumb .buttons-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+#menu-button {
+    padding: 0;
+    background-color: var(--color-b);
+    overflow: hidden;
+    z-index: 999;
+    flex: 1;
+    justify-content: center;
+}
+
+.icons-container, .icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icons-container svg {
+    display: none;
+}
+
+@media only screen and (max-width: 800px) {
+    toggle-button:hover label, 
+    toggle-button:hover svg, 
+    icon-button:hover label, 
+    icon-button:hover svg, 
+    simple-button:hover label {
+        transform: none
+    }
+    toggle-button:active label, 
+    toggle-button:active svg, 
+    icon-button:active label, 
+    icon-button:active svg, 
+    simple-button:active label {
+        transform: scale(0.95);
+    }
+}

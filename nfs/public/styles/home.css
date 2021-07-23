@@ -1,0 +1,67 @@
+#home-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(auto-fill, 170px);
+    grid-row-gap: var(--padding);
+    grid-column-gap: var(--padding);
+    flex: 1;
+}
+
+#home-entry {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-base);
+}
+#home-entry .actions-container {
+    width: 80%;
+    align-self: center;
+}
+
+#login-form  {
+    display: none;
+    width: 80%;
+    align-self: center;
+    justify-self: center;
+}
+form button {
+    flex-basis: auto;
+}
+a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--padding);
+    text-decoration: none;
+    font-size: var(--xs-font-size);
+    text-transform: uppercase;
+    color: var(--color-a);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform var(--speed) ease-in-out, opacity var(--speed) ease-in-out;
+}
+a svg {
+    width: 80%;
+    height: auto;
+}
+
+a:active svg {
+    transform: scale(0.9);
+}
+
+.blue {
+    background-color: var(--color-blue);
+    font-weight: bold;
+}
+@media only screen and (max-width: 800px) {
+    #home-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    #login-form, #home-entry .actions-container {
+        width: calc(100% - calc(var(--padding) * 2));
+    }
+}

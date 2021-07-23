@@ -8,8 +8,8 @@ const passport = require('passport');
 require('./src/configs/passport_config')(passport);
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, './nfs/brunoperry_net/src/views'));
-app.use(express.static(__dirname + '/nfs/brunoperry_net/public'));
+app.set('views', path.join(__dirname, `${process.env.BP_SRC_PATH}/views`));
+app.use(express.static(__dirname + '/nfs/public'));
 
 app.use(express.urlencoded({ extended: false }));
 //express session

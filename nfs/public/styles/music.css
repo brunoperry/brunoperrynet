@@ -1,0 +1,95 @@
+:root {
+    --color-a: #FFC80B;
+    --color-b: #053160;
+    --color-base: #021b36;
+}
+
+html {
+    background-color: var(--color-b);
+}
+body {
+    display: grid;
+    grid-template-areas: 
+    'info'
+    'music'
+    'menu';
+    grid-template-columns: 100%;
+    grid-template-rows: var(--button-height) auto var(--button-height);
+    padding: 0;
+
+}
+
+#info-container {
+    display: flex;
+    grid-area: info;
+}
+#info-button {
+    z-index: 800;
+}
+#info-content {
+    background-color: var(--color-a);
+    position: absolute;
+    inset: 0;
+    bottom: var(--button-height);
+    transform: translateY(-100%);
+    transition: transform var(--speed) ease-in-out;
+}
+
+#music-container {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 50% calc(var(--button-height) / 2) auto;
+    grid-template-areas: 
+    'controls'
+    'scrubb'
+    'volume';
+    grid-area: music;
+}
+
+#music-container icon-button .icon-container {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+#controls-container {
+    display: grid;
+    grid-template-columns: 27% 46% 27%;
+    grid-template-rows: 100%;
+    grid-template-areas:
+    'previous action next';
+    align-items: stretch;
+    justify-content: center;
+}
+
+#previous-button {
+    grid-area: previous;
+    height: auto;
+}
+#action-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-area: action;
+    height: auto;
+}
+#play-button, #pause-button, #loading-icon {
+    height: auto;
+}
+.action-button {
+    position: absolute;
+    display: none;
+}
+#next-button {
+    grid-area: next;
+    height: auto;
+}
+
+#menu-container {
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+    grid-area: menu;
+    z-index: 9999;
+}
