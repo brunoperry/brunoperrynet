@@ -1,8 +1,10 @@
-#FROM alpine
-FROM arm64v8/alpine
-
-RUN apk --no-cache add --virtual builds-deps build-base python3
-RUN apk --no-cache add --update npm
+FROM arm64v8/ubuntu
+#FROM ubuntu
+SHELL [ "/bin/bash", "--login", "-c" ]
+RUN apt update
+RUN apt install nodejs -y
+RUN nodejs -v
+RUN apt install npm -y
 RUN npm install pm2 -g
 
 # Setup project structure
@@ -19,5 +21,5 @@ WORKDIR /app
 # Build project code (in the image itself)
 RUN npm ci
 
-# Run app
+# specify the command to run when the image is started
 CMD npm run production
