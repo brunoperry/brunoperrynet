@@ -290,9 +290,6 @@ module.exports = ${appData.name}Model;
             const radios = await connection.query('SELECT * FROM radios');
             let music = await dirTree(process.env.BP_MUSIC_PATH);
 
-            const data = fs.readFileSync('./src/databases.json');
-            music = JSON.parse(data);
-
             const cleanData = data => {
                 data.path = data.path.replace('./nfs/public', '');
                 data.path = data.path.replace('nfs/public', '');
