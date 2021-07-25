@@ -14,16 +14,9 @@
 </head>
 
 <body>
-    <div id="info-container">
-        <div id="info-content">
 
-        </div>
-        <simple-button id="info-button" label="INFO" t-align="center" f-weight="bold" b-color="var(--color-b)">
-        </simple-button>
-    </div>
     <div id="music-container">
         <div id="controls-container">
-
             <icon-button id="previous-button">
                 <div class="icon-container" slot="icon">
                     <svg slot="icon" width="50%" height="60%" viewBox="0 0 32 40" fill="var(--color-a)">
@@ -77,9 +70,17 @@
             </icon-button>
 
         </div>
-        <range-slider id="scrubb" min="0" max="100" value="30" f-size="var(--xs-font-size)" f-weight="bold" label-on>
+        <range-slider id="scrubb" min="0" max="100" value="0" b-color="var(--color-base)" f-size="var(--xs-font-size)"
+            f-weight="bold">
         </range-slider>
         <range-slider id="volume" min="0" max="100" f-size="var(--xl-font-size)" f-weight="bold"></range-slider>
+    </div>
+    <div id="info-container">
+        <div id="info-content"></div>
+        <div class="button-container">
+            <simple-button id="info-button" label="INFO" t-align="center" f-weight="bold" b-color="var(--color-b)">
+            </simple-button>
+        </div>
     </div>
     <div id="menu-container">
 

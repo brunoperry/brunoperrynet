@@ -9,6 +9,7 @@ simple-button {
 }
 simple-button label {
     text-align: center;
+    display: block;
 }
 
 icon-button {
@@ -191,6 +192,19 @@ mobile-menu simple-list {
 }
 mobile-menu icon-button {
     overflow: auto;
+}
+mobile-menu li {
+    display: block;
+}
+mobile-menu .active {
+    background-color: var(--color-a);
+}
+mobile-menu .active label {
+    color: var(--color-b);
+    font-weight: bold;
+}
+mobile-menu .active svg {
+    fill: var(--color-b);
 }
 bread-crumb {
     position: absolute;

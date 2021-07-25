@@ -288,20 +288,24 @@ module.exports = ${appData.name}Model;
     static async getAllMusic() {
         try {
             const radios = await connection.query('SELECT * FROM radios');
+            for (let i = 0; i < radios.length; i++) {
+                radios[i].id = `0.${radios[i].id}`;
+            }
             let music = await dirTree(process.env.BP_MUSIC_PATH);
 
-            const cleanData = data => {
+            const cleanData = (data, idx) => {
                 data.path = data.path.replace('./nfs/public', '');
                 data.path = data.path.replace('nfs/public', '');
+                data.id = idx;
                 if (data.children)
                     for (let i = 0; i < data.children.length; i++) {
-                        cleanData(data.children[i]);
+                        cleanData(data.children[i], `${idx}.${i}`);
                     }
                 else {
                     data.name = data.name.replace('.mp3', '');
                 }
             }
-            cleanData(music);
+            cleanData(music, '1');
 
             SystemService.music = {
                 radios: radios,

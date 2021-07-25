@@ -91,6 +91,7 @@ class IconButton extends Component {
 
             this.buttonLabel.setAttribute('slot', 'label');
             this.buttonLabel.innerText = this.getAttribute('label');
+
             this.style.justifyContent = 'space-between';
             this.style.display = 'grid';
             this.style.gridTemplateColumns = 'auto var(--button-height)'
@@ -193,6 +194,7 @@ class SimpleList extends Component {
         this.list = null;
         this.currentItem = null;
         this.listData = null;
+        this.listItems = [];
     }
 
     buildList(listData) {
@@ -216,6 +218,8 @@ class SimpleList extends Component {
             }
             li.appendChild(button);
 
+            this.listItems.push(button);
+
             this.list.appendChild(li);
         }
     }
@@ -232,6 +236,7 @@ class SimpleList extends Component {
     }
 
     get data() { return this.currentItem.data }
+    get items() { return this.listItems }
 }
 SimpleList.Events = {
     CLICK: 'simplelisteventsclick'
@@ -528,7 +533,9 @@ class RangeSlider extends Component {
         this.input.type = 'range';
         this.input.slot = 'input';
         this.input.oninput = e => {
-            this.bar.style.width = this.label.innerText = `${this.input.value}%`;
+            this.bar.style.width = `${this.input.value}%`;
+            if (!this.labelOn) this.label.innerText = '';
+            else this.label.innerText = `${this.input.value}%`;
             this.dispatchEvent(new CustomEvent(RangeSlider.Events.CHANGED, { detail: this.input.value }))
         }
         this.input.onchange = e => {
@@ -556,8 +563,7 @@ class RangeSlider extends Component {
         if (this.hasAttribute('t-align')) this.label.style.justifyContent = this.getAttribute('t-align');
         if (this.hasAttribute('label-on')) this.labelOn = true;
         if (this.hasAttribute('value')) {
-            this.input.value = parseInt(this.getAttribute('value'));
-            this.bar.style.width = `${this.input.value}%`;
+            this.value = parseInt(this.getAttribute('value'));
         }
 
         if (this.input.max !== 100) {
@@ -578,7 +584,10 @@ class RangeSlider extends Component {
     }
 
     get value() { return this.input.value }
-    set value(val) { this.input.value = val }
+    set value(val) {
+        this.input.value = val;
+        this.bar.style.width = `${val}%`;
+    }
 }
 RangeSlider.Events = {
     CHANGED: 'rangeslidereventschanged'
@@ -600,6 +609,8 @@ class MobileMenu extends Component {
         this.currentList = null;
         this.breadCrumb = null;
         this.menuButton = null;
+
+        this.activeItems = [];
     }
 
     connectedCallback() {
@@ -661,13 +672,15 @@ class MobileMenu extends Component {
                 }
             })
             btn.setAttribute('label', item.name);
+            for (let j = 0; j < this.activeItems.length; j++) {
+                if (this.activeItems[j] === listData[i].id) {
+                    btn.className = 'active';
+                    break;
+                }
+            }
             item.buttonElem = btn;
         }
 
-        listData.forEach(item => {
-
-
-        });
         if (this.listsContainer.children.length > 0) {
             this.breadCrumb.show(this.currentList.data);
             list.style.marginTop = 'var(--button-height)';
@@ -740,13 +753,34 @@ class MobileMenu extends Component {
 
     close() {
 
+        this.dispatchEvent(new CustomEvent(MobileMenu.Events.CLOSE))
         if (this.breadCrumb.isOpen) this.breadCrumb.hide();
 
         this.isOpen = false;
         this.listsContainer.style.transform = 'translateY(100%)';
         setTimeout(() => {
             this.listsContainer.innerHTML = '';
+            this.currentList = null;
         }, Component.SPEED);
+    }
+
+    setActiveItems(items) {
+
+        this.activeItems = items;
+        if (this.isOpen) {
+            const currItems = this.currentList.items;
+            for (let i = 0; i < currItems.length; i++) {
+                const itm = currItems[i];
+                for (let j = 0; j < this.activeItems.length; j++) {
+                    if (this.activeItems[j] === itm.data.id) {
+                        console.log(this.activeItems[j])
+                        itm.className = 'active';
+                    } else {
+                        itm.className = '';
+                    }
+                }
+            }
+        }
     }
 
     get value() { return null }

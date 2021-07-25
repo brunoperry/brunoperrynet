@@ -84,6 +84,7 @@ class Info {
 
     show(data = null) {
 
+        this.callback('open');
         if (data) this.update(data);
 
         this.contentElem.style.transform = 'translateY(0)';
@@ -91,6 +92,7 @@ class Info {
     }
 
     hide() {
+        this.callback('close');
         this.contentElem.style.transform = 'translateY(-100%)';
         this.isOpen = false;
     }
@@ -100,6 +102,8 @@ window.onload = async e => {
 
     Component.SPEED = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--speed').replace('s', '')) * 1000;
 
+    const musicContainer = document.querySelector('#music-container');
+
     let menuData;
     try {
         const req = await fetch('/music/getall');
@@ -108,12 +112,22 @@ window.onload = async e => {
         console.log('error getting menu data', e);
     }
 
+    //Audio data
+    let currentPlayList = menuData.data[0].children;
+    let currentTrackIndex = 0;
+
     const menu = document.querySelector('#menu');
     menu.update(menuData.data)
     menu.addEventListener(MobileMenu.Events.OPEN, e => {
+        musicContainer.className = 'shrink';
         if (info.isOpen) info.hide();
     })
+    menu.addEventListener(MobileMenu.Events.CLOSE, e => {
+        musicContainer.className = 'grow';
+    })
     menu.addEventListener(MobileMenu.Events.CLICK, e => {
+
+        if (currentPlayList[currentTrackIndex].path === e.detail.data[e.detail.index].path) return;
         currentPlayList = e.detail.data;
         currentTrackIndex = e.detail.index;
         const itm = currentPlayList[currentTrackIndex];
@@ -123,8 +137,19 @@ window.onload = async e => {
     })
 
     const info = new Info(e => {
-        console.log('on info', e);
-    })
+
+        switch (e) {
+            case 'open':
+                musicContainer.className = 'shrink';
+                break;
+            case 'close':
+                musicContainer.className = 'grow';
+                break;
+            default:
+                break;
+        }
+    });
+    info.update(currentPlayList[currentTrackIndex]);
 
     const actionController = new ActionController(e => {
         switch (e.action) {
@@ -150,7 +175,9 @@ window.onload = async e => {
 
     const scrubb = document.querySelector('#scrubb');
     scrubb.addEventListener(RangeSlider.Events.CHANGED, e => {
-        console.log('on scrubb', e.detail);
+
+        let t = (scrubb.value / 100) * audio.duration;
+        audio.currentTime = t;
     });
     scrubb.hide();
 
@@ -163,11 +190,22 @@ window.onload = async e => {
     audio.volume = volume.value / 100;
     audio.playMedia = path => {
 
+        const ids = currentPlayList[currentTrackIndex].id.toString().split('.');
+        let activeItems = [];
+        for (let i = 0; i < ids.length; i++) {
+            if (i > 0) {
+                activeItems.push(`${activeItems[i - 1]}.${ids[i]}`);
+            } else {
+                activeItems.push(ids[i].toString());
+            }
+        }
+        menu.setActiveItems(activeItems);
         try {
             audio.src = path;
             audio.play();
         } catch (error) {
-            console.log(error)
+            actionController.setAction('error');
+            scrubb.hide();
         }
     }
     audio.stopMedia = () => audio.pause();
@@ -176,18 +214,29 @@ window.onload = async e => {
         actionController.setAction('pause');
     }
     audio.onerror = e => {
-        console.log(e);
         actionController.setAction('error');
+        scrubb.hide();
     }
     audio.onplay = e => {
+
+        const track = currentPlayList[currentTrackIndex];
+        if (track.type === 'file') {
+            scrubb.show();
+            audio.addEventListener('timeupdate', onAudioProgress);
+        } else {
+            scrubb.hide();
+            audio.removeEventListener('timeupdate', onAudioProgress);
+        }
         actionController.setAction('loading');
-        info.update(currentPlayList[currentTrackIndex])
+        info.update(track)
     }
     audio.onpause = e => {
         actionController.setAction('play');
     }
     audio.onended = e => {
-        console.log('ended')
+        currentTrackIndex++;
+        if (currentTrackIndex >= currentPlayList.length) currentTrackIndex = 0;
+        audio.playMedia(currentPlayList[currentTrackIndex].path);
     }
     audio.onstalled = e => {
         actionController.setAction('loading');
@@ -199,9 +248,9 @@ window.onload = async e => {
         actionController.setAction('loading');
     }
 
-    //RADIOS
-    let currentPlayList = menuData.data[0].children;
-    let currentTrackIndex = 0;
+    const onAudioProgress = e => {
+        scrubb.value = (audio.currentTime / audio.duration) * 100;
+    }
 
     document.body.style.opacity = 1;
 }
