@@ -42,6 +42,15 @@ body {
     bottom: var(--button-height);
     transform: translateY(-100%);
     transition: transform var(--speed) ease-in-out;
+    padding: var(--padding);
+    padding-top: calc(var(--button-height) + var(--padding));
+}
+
+#info-content label {
+    color: var(--color-b);
+    font-size: var(--s-font-size);
+    font-weight: bold;
+    margin-bottom: var(--padding);
 }
 
 #music-container {

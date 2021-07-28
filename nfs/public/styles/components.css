@@ -257,6 +257,11 @@ bread-crumb .buttons-container {
     display: none;
 }
 
+#file-input {
+    position: absolute;
+    display: none;
+}
+
 @media only screen and (max-width: 800px) {
     toggle-button:hover label, 
     toggle-button:hover svg, 

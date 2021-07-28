@@ -75,11 +75,38 @@ class Info {
 
             if (this.isOpen) this.hide();
             else this.show();
-        })
+        });
+        this.titleLabel = this.view.querySelector('#type-label');
+        this.bandLabel = this.view.querySelector('#band-label');
+        this.albumLabel = this.view.querySelector('#album-label');
+        this.trackLabel = this.view.querySelector('#track-label');
+        this.albumCover = this.view.querySelector('#album-cover');
     }
 
     update(data) {
         this.button.value = data.name;
+
+        if (data.type === 'stream') {
+            this.albumLabel.style.display = 'none';
+            this.bandLabel.innerText = data.name;
+            this.trackLabel.innerText = data.path;
+        } else {
+            this.albumLabel.style.display = 'none';
+
+            const path = data.path.split('/');
+            let res = [];
+            for (let i = 3; i < path.length; i++) {
+                res.push(path[i]);
+            }
+            this.bandLabel.innerText = res[0];
+            if (res.length === 2) {
+                this.trackLabel.innerText = res[1];
+            } else {
+                this.albumLabel.style.display = 'flex';
+                this.albumLabel.innerText = res[1];
+                this.trackLabel.innerText = res[2];
+            }
+        }
     }
 
     show(data = null) {
@@ -128,13 +155,47 @@ window.onload = async e => {
     menu.addEventListener(MobileMenu.Events.CLICK, e => {
 
         if (currentPlayList[currentTrackIndex].path === e.detail.data[e.detail.index].path) return;
-        currentPlayList = e.detail.data;
-        currentTrackIndex = e.detail.index;
-        const itm = currentPlayList[currentTrackIndex];
-        if (itm.type === 'stream' || itm.type === 'file') {
-            audio.playMedia(itm.path);
+
+        const type = e.detail.data[e.detail.index].type;
+        switch (type) {
+            case 'stream':
+            case 'file':
+                currentPlayList = e.detail.data;
+                currentTrackIndex = e.detail.index;
+                audio.playMedia(currentPlayList[currentTrackIndex].path);
+                break;
+            case 'open_file':
+                fileInput.click();
+                break;
+            case 'url':
+                window.location = e.detail.data[e.detail.index].path;
+                break;
+            default:
+                break;
         }
     })
+
+    const fileInput = document.querySelector('#file-input');
+    fileInput.onchange = e => {
+
+        if (fileInput.files.length === 0) return;
+
+        let pl = [];
+        for (let i = 0; i < fileInput.files.length; i++) {
+            const f = fileInput.files[i];
+            pl.push({
+                id: `2.${i}`,
+                name: f.name.replace('.mp3', ''),
+                path: URL.createObjectURL(f),
+                type: 'file'
+            })
+        }
+        currentPlayList = pl;
+        currentTrackIndex = 0;
+
+        audio.playMedia(currentPlayList[currentTrackIndex].path);
+        menu.setActiveItems([]);
+    }
 
     const info = new Info(e => {
 
@@ -188,7 +249,7 @@ window.onload = async e => {
 
     const audio = new Audio();
     audio.volume = volume.value / 100;
-    audio.playMedia = path => {
+    audio.playMedia = (path) => {
 
         const ids = currentPlayList[currentTrackIndex].id.toString().split('.');
         let activeItems = [];
@@ -200,6 +261,7 @@ window.onload = async e => {
             }
         }
         menu.setActiveItems(activeItems);
+
         try {
             audio.src = path;
             audio.play();

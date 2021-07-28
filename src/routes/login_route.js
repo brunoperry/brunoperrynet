@@ -3,8 +3,11 @@ const router = express.Router();
 const passport = require('passport');
 
 
+const { forwardAuthenticated } = require('../configs/auth_config');
+
+
 //login view
-router.get('/', (req, res, next) => {
+router.get('/', forwardAuthenticated, (req, res, next) => {
     res.render('login');
 });
 //login handle

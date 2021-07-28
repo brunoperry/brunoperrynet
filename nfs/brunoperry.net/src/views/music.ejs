@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="brunoperry.net - Music@2021">
+    <link rel="icon" href="/images/music-favicon.png">
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/components.css">
     <link rel="stylesheet" href="/styles/music.css">
@@ -14,7 +16,7 @@
 </head>
 
 <body>
-
+    <input id="file-input" type="file" accept="audio/mp3" multiple="multiple" name="file">
     <div id="music-container">
         <div id="controls-container">
             <icon-button id="previous-button">
@@ -25,7 +27,6 @@
                     </svg>
                 </div>
             </icon-button>
-
             <div id="action-button">
                 <icon-button id="play-button" class="action-button">
                     <div class="icon-container" slot="icon">
@@ -73,17 +74,22 @@
         <range-slider id="scrubb" min="0" max="100" value="0" b-color="var(--color-base)" f-size="var(--xs-font-size)"
             f-weight="bold">
         </range-slider>
-        <range-slider id="volume" min="0" max="100" f-size="var(--xl-font-size)" f-weight="bold"></range-slider>
+        <range-slider id="volume" min="0" max="100" f-size="var(--xl-font-size)" f-weight="bold">
+        </range-slider>
     </div>
     <div id="info-container">
-        <div id="info-content"></div>
+        <div id="info-content">
+            <label id="band-label"></label>
+            <label id="album-label"></label>
+            <label id="track-label"></label>
+            <img id="album-cover">
+        </div>
         <div class="button-container">
             <simple-button id="info-button" label="INFO" t-align="center" f-weight="bold" b-color="var(--color-b)">
             </simple-button>
         </div>
     </div>
     <div id="menu-container">
-
         <mobile-menu id="menu">
             <toggle-button slot="button" id="menu-button">
                 <div class="icons-container" slot="icons">

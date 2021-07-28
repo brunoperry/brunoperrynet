@@ -139,14 +139,14 @@ ${appData.name}
 `;
 
 
-                fs.writeFileSync(`${process.env.BP_PUBLIC_PATH}/${appData.name}.css`, viewStyle);
+                fs.writeFileSync(`${process.env.BP_PUBLIC_PATH}/styles/${appData.name}.css`, viewStyle);
 
                 const viewScript = `
 window.onload = () => {
     document.body.style.opacity = 1;
 }
 `;
-                fs.writeFileSync(`${process.env.BP_PUBLIC_PATH}/${appData.name}.js`, viewScript);
+                fs.writeFileSync(`${process.env.BP_PUBLIC_PATH}/scripts/${appData.name}.js`, viewScript);
 
                 let tmpURL;
                 let routeScript;

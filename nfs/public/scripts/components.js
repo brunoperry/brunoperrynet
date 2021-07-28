@@ -659,6 +659,7 @@ class MobileMenu extends Component {
             }
             btn.index = i;
             btn.addEventListener(Component.Events.CLICK, e => {
+
                 if (btn.data.type === 'directory') {
                     this.addList(btn.data.children)
                 } else {
@@ -773,7 +774,6 @@ class MobileMenu extends Component {
                 const itm = currItems[i];
                 for (let j = 0; j < this.activeItems.length; j++) {
                     if (this.activeItems[j] === itm.data.id) {
-                        console.log(this.activeItems[j])
                         itm.className = 'active';
                     } else {
                         itm.className = '';
