@@ -32,6 +32,7 @@ class SystemService {
         await this.getAllIcons();
         await this.getAllUsers();
         await this.getAllMusic();
+        await this.getAllSites();
 
         SystemService.SERVER = server;
 
@@ -52,7 +53,6 @@ class SystemService {
 
         if (app.type !== 'webapp') return;
 
-
         if (app.route !== null) {
 
             let router = require(`../${app.route}`);
@@ -69,6 +69,32 @@ class SystemService {
             else if (app.admin === 0) SystemService.SERVER.get(`/${app.short_name}`, (req, res, next) => {
                 res.render(app.short_name);
             });
+        }
+    }
+
+    static async getGameScores(gameName) {
+        try {
+            const games = await connection.query('SELECT * FROM games WHERE name=?', [gameName]);
+            return JSON.stringify(games);
+            // return games;
+        } catch (error) {
+            console.error('error getting all apps', error);
+            return [];
+        }
+
+    }
+
+    static async getAllSites() {
+        try {
+            const outApps = [];
+            const apps = await connection.query('SELECT * FROM apps');
+            for (let i = 0; i < apps.length; i++) {
+                outApps.push(await this.createApp(apps[i]));
+            }
+            return outApps;
+        } catch (error) {
+            console.error('error getting all apps', error);
+            return [];
         }
     }
 
@@ -362,7 +388,7 @@ module.exports = ${appData.name}Model;
     }
 
     static async execShellCommand(cmd) {
-        const exec = require("child_process").exec;
+        const exec = require('child_process').exec;
         exec(cmd);
     }
 }
@@ -370,6 +396,7 @@ module.exports = ${appData.name}Model;
 SystemService.icons = [];
 SystemService.music = [];
 SystemService.apps = [];
+SystemService.sites = [];
 SystemService.users = [];
 SystemService.SERVER = null;
 
