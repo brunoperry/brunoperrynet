@@ -33,6 +33,7 @@ class SystemService {
         await this.getAllUsers();
         await this.getAllMusic();
         await this.getAllSites();
+        await this.getAllGames();
 
         SystemService.SERVER = server;
 
@@ -84,6 +85,45 @@ class SystemService {
 
     }
 
+    static async getAllGames() {
+
+        try {
+            SystemService.games = [];
+            const gamesDir = dirTree(process.env.BP_GAMES_PATH);
+            for (let i = 0; i < gamesDir.children.length; i++) {
+                const gDir = gamesDir.children[i];
+                const dataDir = gDir.children.find(a => a.name === 'data')
+
+
+                let game = {
+                    name: gDir.name,
+                    data: {}
+                }
+
+                for (let j = 0; j < dataDir.children.length; j++) {
+                    const file = fs.readFileSync(dataDir.children[j].path);
+                    let gData = JSON.parse(file);
+
+                    if (gData.children) gData = gData.children;
+
+                    const dataName = dataDir.children[j].name.replace('.json', '');
+
+                    game.data[dataName] = gData;
+                }
+
+                SystemService.games.push(game);
+
+            }
+        } catch (error) {
+            console.error('error initializing games', error);
+        }
+
+
+        // let student = JSON.parse(rawdata);
+    }
+    static async getGameData(gameName) {
+        return SystemService.games.find(g => g.name === gameName)
+    }
     static async getAllSites() {
         try {
             const outApps = [];
@@ -229,7 +269,6 @@ module.exports = ${appData.name}Model;
             return false;
         }
     }
-
     static async createApp(appData) {
         const appOut = new App(appData);
 
@@ -372,7 +411,6 @@ module.exports = ${appData.name}Model;
             return false;
         }
     }
-
     static async restartServer() {
         await SystemService.execShellCommand('pm2 restart 0');
     }
@@ -395,6 +433,7 @@ module.exports = ${appData.name}Model;
 
 SystemService.icons = [];
 SystemService.music = [];
+SystemService.games = [];
 SystemService.apps = [];
 SystemService.sites = [];
 SystemService.users = [];

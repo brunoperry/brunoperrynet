@@ -12,6 +12,13 @@ router.get('/paradisecafe', (req, res) => {
     res.sendFile(path.join(gamesDir, 'index.html'));
 });
 
+router.get('/paradisecafe/data', async (req, res) => {
+
+    const data = await SystemService.getGameData('paradisecafe2');
+    console.log('ff', data)
+    res.json(data);
+})
+
 router.get('/paradisecafe/scores', async (req, res) => {
 
     const scores = await SystemService.getGameScores('paradisecafe');

@@ -1,0 +1,42 @@
+{
+    "path": "media/sounds",
+    "name": "sounds",
+    "type": "folder",
+    "children": [
+        {
+            "path": "media/sounds/brothel_track.mp3",
+            "name": "brothel_track.mp3",
+            "type": "file"
+        },
+        {
+            "path": "media/sounds/crackhouse_track.mp3",
+            "name": "crackhouse_track.mp3",
+            "type": "file"
+        },
+        {
+            "path": "media/sounds/jail_track.mp3",
+            "name": "jail_track.mp3",
+            "type": "file"
+        },
+        {
+            "path": "media/sounds/main_track.mp3",
+            "name": "main_track.mp3",
+            "type": "file"
+        },
+        {
+            "path": "media/sounds/paradisecafe_track.mp3",
+            "name": "paradisecafe_track.mp3",
+            "type": "file"
+        },
+        {
+            "path": "media/sounds/splash_track.mp3",
+            "name": "splash_track.mp3",
+            "type": "file"
+        },
+        {
+            "path": "media/sounds/street_track.mp3",
+            "name": "street_track.mp3",
+            "type": "file"
+        }
+    ]
+}
