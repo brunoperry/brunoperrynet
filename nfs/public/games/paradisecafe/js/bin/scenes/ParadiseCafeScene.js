@@ -98,8 +98,6 @@ class ParadiseCafeScene extends Scene {
             }
 
             if (this.dealer.currentDeal.status) {
-
-                console.log(this.dealer.currentDeal)
                 switch (this.dealer.currentDeal.dealType) {
                     case 'sell_wallet':
                         this.hero.updateInventory({
@@ -128,20 +126,6 @@ class ParadiseCafeScene extends Scene {
                         })
                         break;
                 }
-                // if (this.dealer.currentDeal.dealType === 'sell') {
-                //     if (Resources.PLAYER_INVENTORY.cash > this.dealer.currentDeal.value) {
-                //         this.hero.updateInventory({
-                //             drugs: + 1,
-                //             cash: -this.dealer.currentDeal.value
-                //         })
-                //     }
-
-                // } else {
-                //     this.hero.updateInventory({
-                //         drugs: -1,
-                //         cash: this.dealer.currentDeal.value
-                //     })
-                // }
             }
 
             this.changeAction(Hero.States.IDLE_PARADISE_CAFE);
@@ -278,10 +262,6 @@ class ParadiseCafeScene extends Scene {
         this.NPCs.forEach(npc => {
             if (npc.isEnabled) npc.update();
         });
-
-        // if (this.currentNPCIndex !== null) {
-        //     this.NPCs[this.currentNPCIndex].update();
-        // }
         super.update(delta);
     }
 

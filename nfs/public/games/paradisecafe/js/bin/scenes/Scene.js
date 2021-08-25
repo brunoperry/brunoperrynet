@@ -110,7 +110,9 @@ class Scene {
     }
 
     enable() {
-        document.body.style.backgroundColor = `var(--${this.name}scene-color)`;
+
+        document.querySelector('html').style.backgroundColor = `var(--${this.name}scene-color)`;
+
         this.isEnabled = true;
         if (this.hero) this.hero.inventory = Resources.PLAYER_INVENTORY;
     }

@@ -4,6 +4,15 @@ class Resources {
 
         const RESOURCES_TO_LOAD = 2;
 
+        const score = data.scores.find(e => e.name === 'paradisecafe').scores;
+        Resources.scoresData = JSON.parse(score);
+        let highest = 0;
+        for (let i = 0; i < Resources.scoresData.length; i++) {
+            const scr = parseInt(Resources.scoresData[i].score);
+            if (scr > highest) highest = scr;
+        }
+        Resources.HIGH_SCORE = highest;
+
         try {
 
             const totalImages = data.media.images.length;
@@ -39,8 +48,6 @@ class Resources {
         }
 
         Resources.initialized = true;
-
-        console.log('resources ready!')
     }
 
     static getImages(from = null) {
@@ -71,9 +78,11 @@ Resources.DIALOG_SPEED = 1000;
 Resources.imagesData = null;
 Resources.audioData = null;
 Resources.labelsData = null;
+Resources.scoresData = null;
 
 Resources.VERIFY_AGE_LINK = 'https://www.youtube.com/watch?v=Yzvr9nww1gg';
 Resources.initialized = false;
+Resources.HIGH_SCORE = 0;
 
 Resources.PLAYER_INVENTORY = {
     wallet: true,

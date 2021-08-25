@@ -6,13 +6,6 @@ class Controller {
         this.isShown = false;
 
         this.view = document.querySelector('#controller');
-
-        document.querySelector('#play-pause-button').onclick = e => {
-            this.callback(Controller.Events.PLAYPAUSE)
-        }
-        document.querySelector('#mute-button').onclick = e => {
-            this.callback(Controller.Events.MUTE)
-        }
         document.querySelector('#menu-button').onclick = e => {
             this.callback(Controller.Events.MENU)
         }
@@ -31,7 +24,5 @@ class Controller {
 }
 
 Controller.Events = {
-    PLAYPAUSE: 'controllereventsplaypause',
-    MUTE: 'controllereventsmute',
     MENU: 'controllereventsmenu'
 }

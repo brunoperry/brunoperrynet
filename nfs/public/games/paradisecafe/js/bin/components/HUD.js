@@ -18,14 +18,14 @@ class HUD extends Component {
         HUD.isEnabled = true;
     }
 
-    static drawHiScores(hiScore = 200) {
+    static drawHiScores() {
 
         const yPos = HUD.canvas.height - 35;
         const xPos = HUD.canvas.width - HUD.hiScorewsX;
 
         HUD.ctx.drawImage(HUD.scoresBackgroundImage.imageData, 0, yPos, HUD.canvas.width, 10);
 
-        const text = `${Resources.labelsData.HISCORE} = ${hiScore}`;
+        const text = `${Resources.labelsData.HISCORE} = ${Resources.HIGH_SCORE}`;
         let textMesaure = HUD.ctx.measureText(text);
         HUD.ctx.fillStyle = '#bdbdbd';
         HUD.ctx.fillRect(xPos, yPos, textMesaure.width, 10);
@@ -50,7 +50,7 @@ class HUD extends Component {
 
         if (!HUD.isEnabled) return;
 
-        if (HUD.hiScoresEnabled) HUD.drawHiScores(300);
+        if (HUD.hiScoresEnabled) HUD.drawHiScores();
         else HUD.hiScorewsX = 0;
 
         if (data.expense !== null) HUD.drawExpense(data.expense);

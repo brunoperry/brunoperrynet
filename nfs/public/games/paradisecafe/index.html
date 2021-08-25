@@ -2,9 +2,10 @@
 <html>
 
 <head>
-    <title>Paradise Café2</title>
+    <title>Paradise Café</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link rel="tab icon" type="image/png" href="favico.png" />
     <link href="paradisecafe.css" media="screen" rel="stylesheet" type="text/css">
 
     <script src="js/Resources.js"></script>
@@ -21,6 +22,7 @@
     <script src="js/bin/components/Balloon.js"></script>
     <script src="js/bin/components/Controller.js"></script>
     <script src="js/bin/components/SwipeDoor.js"></script>
+    <script src="js/bin/components/Menu.js"></script>
 
     <script src="js/bin/scenes/Scene.js"></script>
     <script src="js/bin/scenes/LandingScene.js"></script>
@@ -54,8 +56,6 @@
     <div id="main-container">
         <div id="header-container">
             <div id="controller">
-                <button id="play-pause-button"></button>
-                <button id="mute-button"></button>
                 <button id="menu-button"></button>
             </div>
         </div>
@@ -65,6 +65,18 @@
         <div id="keyboard-container">
             <div id="keyboard" class="kb-container"></div>
             <button id="exit-scene-button" class="invisible"></button>
+        </div>
+    </div>
+    <div id="menu">
+        <div id="menu-container">
+            <h1>PARADISE CAFÉ</h1>
+            <label id="music-button">Música[<span class="highlight">X</span>]</label>
+            <label>Velocidade:</label>
+            <label id="nspeed-button">Normal[<span class="highlight">X</span>]</label>
+            <label id="tspeed-button">Turbo[ ]</label>
+            <label id="about-button">Acerca</label>
+            <label id="exit-button">Sair</label>
+            <label id="close-button">Fechar >></label>
         </div>
     </div>
 </body>

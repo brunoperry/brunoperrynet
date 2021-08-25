@@ -29,7 +29,9 @@ class Waiter extends Character {
         }
     }
     doShowBill() {
-
+        if (this.currentCycle !== this.showBillClycle) {
+            this.setCurrentCycle(this.showBillClycle, false);
+        }
     }
     doShow() {
         this.doExitDoor();
@@ -42,11 +44,13 @@ class Waiter extends Character {
         super.enable();
     }
     disable() {
+        const cCycle = this.currentCycle;
         super.disable();
         this.hasServed = false;
         this.inventory = {
             drink_value: null
         }
+        this.currentCycle = cCycle;
     }
 }
 

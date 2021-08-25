@@ -30,5 +30,8 @@
     "HOME": "INÍCIO",
     "OPEN": "ABRIR",
     "CLOSE": "FECHAR",
-    "NAME": "Nome"
+    "NAME": "Nome",
+    "MUSIC": "Música",
+    "NORMAL": "Normal",
+    "TURBO": "Turbo"
 }

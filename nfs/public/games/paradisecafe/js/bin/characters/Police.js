@@ -64,8 +64,12 @@ class Police extends Character {
 
     disable() {
         super.disable();
-        this.doShowPapers = false;
+
+        this.isAskDocs = false;
+        this.hasArrest = false;
+
         this.walkTick = 0;
+
         this.x = 0;
     }
 }

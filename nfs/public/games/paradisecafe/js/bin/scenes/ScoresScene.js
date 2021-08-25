@@ -3,8 +3,6 @@ class ScoresScene extends Scene {
     constructor(callback) {
         super(callback, ScoresScene.NAME);
 
-        console.log(this.background)
-
         this.scoresData = [{
             id: 0,
             name: 'TST',
@@ -63,18 +61,7 @@ class ScoresScene extends Scene {
     async enable() {
         super.enable();
 
-        try {
-            const req = await fetch('https://brunoperry.net/games/paradisecafe/scores');
-            this.scoresData = await req.json();
-        } catch (error) {
-            console.log('problem loading scores');
-            this.scoresData = [{
-                id: 0,
-                name: 'TST',
-                score: 10000,
-                date_created: '23-ABR-2016'
-            }];
-        }
+        this.scoresData = Resources.scoresData;
 
         if (!Keyboard.isShown) {
             Keyboard.show([

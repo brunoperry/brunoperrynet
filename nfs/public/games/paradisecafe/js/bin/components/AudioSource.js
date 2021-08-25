@@ -5,21 +5,21 @@ class AudioSource {
         this.player = new Audio();
         this.currentSrc = null;
 
-        this.player.onended = () => {
-            this.play(this.currentSrc);
+        this.player.onended = async () => {
+            await this.play(this.currentSrc);
         }
 
         this.mutedVolume = 0;
     }
 
-    play(src = null) {
+    async play(src = null) {
         if (!src) return;
 
         if (!this.player.paused) {
             this.stop();
         }
         this.currentSrc = this.player.src = src;
-        this.player.play();
+        await this.player.play();
     }
 
     stop() {
