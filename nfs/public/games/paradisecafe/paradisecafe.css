@@ -1,0 +1,196 @@
+:root {
+    --color-blue: #0400c0;
+    --color-green: #008300;
+    --color-red: #b80a01;
+    --color-pink: #b700c4;
+    --color-white: #ffffff;
+    --color-yellow: #bebe01;
+    --color-black: #000000;
+
+    --padding: 10px;
+
+    --font-family-mono: "mono";
+    --l-font-size: 4.5em;
+    --m-font-size: 2.8em;
+    --s-font-size: 2em;
+
+    --speed: 0.3s;
+
+    --max-width: 512px;
+    --max-height: 800px;
+
+    --button-size: 64px;
+
+    --btn-blue-a: rgba(168,187,198,1);
+    --btn-blue-b: rgba(88,118,132,1);
+    --btn-red-a: rgb(196, 73, 73);
+    --btn-red-b: rgb(133, 22, 22);
+
+    --landingscene-color: var(--color-green);
+    --splashscene-color: var(--color-red);
+    --mainscene-color: var(--color-black);
+    --streetscene-color:rgb(0 0 192);
+    --paradisecafescene-color: var(--color-black);
+    --streetscene-color: var(--color-blue);
+    --scoresscene-color: var(--color-yellow);
+    --jailscene-color:var(--color-black);
+    --brothelscene-color:var(--color-pink);
+    --crackhousescene-color:var(--color-black);
+}
+
+html, body {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--color-green);
+    font-family: var(--font-family-mono);
+    -webkit-font-smoothing: none;
+}
+
+body {
+    opacity: 0;
+    transition: opacity var(--speed) linear, background-color var(--speed) linear;
+}
+
+canvas {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    color: #fff;
+}
+button {
+    text-transform: uppercase;
+    border: 2px solid #717c81;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-family: var(--font-family-mono);
+    font-size: var(--m-font-size);
+    color: var(--color-white);
+    background: linear-gradient(to bottom,var(--btn-blue-a) 0,var(--btn-blue-b) 100%);
+    cursor: pointer;
+}
+button:active {
+    transform: scale(0.95);
+    background: linear-gradient(to bottom,var(--btn-blue-b) 0,var(--btn-blue-a) 100%);
+}
+
+#main-container {
+
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    max-height: var(--max-height);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    flex-direction: column;
+}
+#header-container {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    flex: 1;
+}
+
+#controller {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    flex: 1;
+    transform: translateY(-100%);
+    transition: transform var(--speed) linear;
+}
+#controller button {
+    border: none;
+    width: var(--button-size);
+    height: var(--button-size);
+}
+#play-pause-button {
+    background-image: url('media/images/icons_play_off.png');
+}
+#mute-button {
+    background-image: url('media/images/icons_sound_on.png');
+}
+#menu-button {
+    background-image: url('media/images/icons_hamburger.png');
+}
+
+#canvas-container {
+    flex: 2;
+    z-index: 9999;
+}
+#keyboard-container {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    flex: 1;
+    overflow: hidden;
+}
+#exit-scene-button {
+    position: absolute;
+    top: calc(50% + var(--padding));
+    right: 0;
+    background: linear-gradient(to bottom,var(--btn-red-a) 0,var(--btn-red-b) 100%);
+    border: 2px solid #817171;
+    transition: transform var(--speed) ease-in-out;
+}
+#exit-scene-button:active {
+    background: linear-gradient(to bottom,var(--btn-red-b) 0,var(--btn-red-a) 100%);
+}
+.visible {
+    transform: scale3d(1,1,1);
+    opacity: 1;
+    pointer-events: initial;
+}
+.invisible {
+    transform: scale3d(0.9,0.9,0.9);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.container {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.kb-container {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--padding);
+    padding: var(--padding);
+    background-image: url('media/images/keyboard_bckgrd.png');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    min-height: 128px;
+    box-sizing: border-box;
+    transform: translateY(100%);
+    transition: transform var(--speed) linear;
+}
+.v-canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+@font-face { 
+    font-family: mono; src: url("media/font/mono.ttf");
+} 
+@media screen and (max-width: 480px) {
+    button {
+        font-size: var(--s-font-size);
+    }
+}

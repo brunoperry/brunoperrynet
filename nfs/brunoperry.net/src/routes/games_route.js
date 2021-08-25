@@ -6,24 +6,15 @@ const SystemService = require('../../../../src/system_service');
 router.get('/', (req, res) => {
     res.render('games');
 });
-router.get('/paradisecafe', (req, res) => {
-    const gamesDir = __dirname.replace('/src/routes', '/games/paradisecafe2');
 
-    res.sendFile(path.join(gamesDir, 'index.html'));
+router.get('/paradisecafe', (req, res) => {
+    const gamesDir = __dirname.replace('/src/routes', '/games/paradisecafe/index.html');
+    res.sendFile(gamesDir);
 });
 
 router.get('/paradisecafe/data', async (req, res) => {
-
-    const data = await SystemService.getGameData('paradisecafe2');
-    console.log('ff', data)
+    const data = await SystemService.getGameData('paradisecafe');
     res.json(data);
-})
-
-router.get('/paradisecafe/scores', async (req, res) => {
-
-    const scores = await SystemService.getGameScores('paradisecafe');
-    const parseData = JSON.parse(scores)[0]
-    res.json(parseData.scores);
 })
 
 module.exports = router;

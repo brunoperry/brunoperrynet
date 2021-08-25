@@ -73,10 +73,12 @@ class SystemService {
         }
     }
 
-    static async getGameScores(gameName) {
+    static async getGameScores(gameName, andStringify = true) {
         try {
             const games = await connection.query('SELECT * FROM games WHERE name=?', [gameName]);
-            return JSON.stringify(games);
+
+            if (andStringify) return JSON.stringify(games);
+            else return JSON.parse(JSON.stringify(games));
             // return games;
         } catch (error) {
             console.error('error getting all apps', error);
@@ -90,10 +92,12 @@ class SystemService {
         try {
             SystemService.games = [];
             const gamesDir = dirTree(process.env.BP_GAMES_PATH);
+
             for (let i = 0; i < gamesDir.children.length; i++) {
                 const gDir = gamesDir.children[i];
-                const dataDir = gDir.children.find(a => a.name === 'data')
 
+                if (gDir.children.length === 0) continue;
+                const dataDir = gDir.children.find(a => a.name === 'data')
 
                 let game = {
                     name: gDir.name,
@@ -122,7 +126,9 @@ class SystemService {
         // let student = JSON.parse(rawdata);
     }
     static async getGameData(gameName) {
-        return SystemService.games.find(g => g.name === gameName)
+        let gameData = SystemService.games.find(g => g.name === gameName);
+        gameData.scores = await this.getGameScores(gameName, false);
+        return gameData;
     }
     static async getAllSites() {
         try {
