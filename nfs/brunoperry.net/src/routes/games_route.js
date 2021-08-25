@@ -17,8 +17,9 @@ router.get('/paradisecafe', (req, res) => {
 });
 
 router.get('/paradisecafe/about', (req, res) => {
-    const gameView = __dirname.replace('/src/routes', '/games/paradisecafe/about.html');
-    res.sendFile(gameView);
+
+    const aboutView = '/app/nfs/public/games/paradisecafe/about.html';
+    res.sendFile(aboutView);
 });
 
 router.get('/paradisecafe/data', async (req, res) => {
