@@ -4,12 +4,21 @@ const path = require('path');
 const SystemService = require('../../../../src/system_service');
 
 router.get('/', (req, res) => {
-    res.render('games');
+
+    console.log(SystemService.games)
+    res.render('games', {
+        data: SystemService.games
+    });
 });
 
 router.get('/paradisecafe', (req, res) => {
-    const gamesDir = __dirname.replace('/src/routes', '/games/paradisecafe/index.html');
-    res.sendFile(gamesDir);
+    const gameView = __dirname.replace('/src/routes', '/games/paradisecafe/index.html');
+    res.sendFile(gameView);
+});
+
+router.get('/paradisecafe/about', (req, res) => {
+    const gameView = __dirname.replace('/src/routes', '/games/paradisecafe/about.html');
+    res.sendFile(gameView);
 });
 
 router.get('/paradisecafe/data', async (req, res) => {

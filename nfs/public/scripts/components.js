@@ -54,8 +54,8 @@ class SimpleButton extends Component {
         if (this.hasAttribute('f-weight')) this.buttonLabel.style.fontWeight = this.getAttribute('f-weight');
         if (this.hasAttribute('f-color')) this.buttonLabel.style.color = this.getAttribute('f-color');
         if (this.hasAttribute('t-align')) this.style.justifyContent = this.getAttribute('t-align');
-
-        this.addEventListener('click', () => this.onClick());
+        if (!this.hasAttribute('url')) this.addEventListener('click', () => this.onClick());
+        else this.addEventListener('click', () => window.location = this.getAttribute('url'));
 
         setTimeout(() => {
             super.connectedCallback();
@@ -226,9 +226,13 @@ class SimpleList extends Component {
 
     connectedCallback() {
 
-        this.list = document.createElement('ul');
-        this.list.setAttribute('slot', 'list');
-        this.appendChild(this.list);
+        if (this.querySelector('ul')) {
+
+        } else {
+            this.list = document.createElement('ul');
+            this.list.setAttribute('slot', 'list');
+            this.appendChild(this.list);
+        }
 
         setTimeout(() => {
             super.connectedCallback();

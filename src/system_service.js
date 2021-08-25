@@ -100,6 +100,7 @@ class SystemService {
                 const dataDir = gDir.children.find(a => a.name === 'data')
 
                 let game = {
+                    url: `https://brunoperry.net/games/${gDir.name.replace(" ", "")}`,
                     name: gDir.name,
                     data: {}
                 }
