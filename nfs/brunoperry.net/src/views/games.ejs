@@ -14,8 +14,10 @@
 </head>
 
 <body>
-    <simple-button label="paradise cafe" url="https://brunoperry.net/games/paradisecafe">
-    </simple-button>
+    <% for (var i=0; i <data.length; i++ ) { %>
+        <simple-button label="<%= data[i].name %>" url="<%= data[i].url %>">
+        </simple-button>
+        <% } %>
 </body>
 
 </html>

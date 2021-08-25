@@ -3,9 +3,9 @@ const router = express.Router();
 const path = require('path');
 const SystemService = require('../../../../src/system_service');
 
+
 router.get('/', (req, res) => {
 
-    console.log(SystemService.games)
     res.render('games', {
         data: SystemService.games
     });
