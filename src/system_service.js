@@ -34,6 +34,7 @@ class SystemService {
         await this.getAllMusic();
         await this.getAllSites();
         await this.getAllGames();
+        await this.getAllImages();
 
         SystemService.SERVER = server;
 
@@ -48,6 +49,15 @@ class SystemService {
         }
     }
 
+    static getAllImages() {
+        try {
+            const images = dirTree(process.env.BP_IMAGES_PATH);
+            SystemService.images = images.children;
+        } catch (error) {
+            console.error('error getting images', error);
+        }
+    }
+
     static addAppToServer(app) {
 
         SystemService.apps.push(app);
@@ -55,7 +65,6 @@ class SystemService {
         if (app.type !== 'webapp') return;
 
         if (app.route !== null) {
-
             let router = require(`../${app.route}`);
             if (app.admin === 1) {
                 SystemService.SERVER.use(`/${app.short_name}`, ensureAuthenticated, router);
@@ -73,18 +82,58 @@ class SystemService {
         }
     }
 
+    static async addVisitor(visitorData) {
+
+        try {
+            await connection.query('INSERT INTO visitors (ip, game, browser, date) VALUES (?,?,?,?);', [visitorData.ip, visitorData.game, visitorData.browser, Date.now()]);
+            return {
+                success: true
+            };
+        } catch (error) {
+            console.error('error setting visitor', error);
+            return {
+                success: false
+            };
+        }
+    }
+
+    static async setGameScore(gameName, scoreData) {
+
+        const gameData = await this.getGameScores(gameName, false);
+
+        let scoresData = JSON.parse(gameData[0].scores);
+        scoresData.push(scoreData);
+        scoresData.sort((a, b) => parseInt(a.score) - parseInt(b.score));
+        scoresData = scoresData.reverse();
+
+        try {
+            await connection.query(`UPDATE games 
+            SET 
+                scores = ?
+            WHERE
+                name = ?;`, [JSON.stringify(scoresData), gameName]);
+
+            return {
+                status: 'success'
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                status: 'Error!',
+                message: error
+            }
+        }
+    }
+
     static async getGameScores(gameName, andStringify = true) {
         try {
             const games = await connection.query('SELECT * FROM games WHERE name=?', [gameName]);
-
             if (andStringify) return JSON.stringify(games);
             else return JSON.parse(JSON.stringify(games));
-            // return games;
         } catch (error) {
             console.error('error getting all apps', error);
             return [];
         }
-
     }
 
     static async getAllGames() {
@@ -440,6 +489,7 @@ module.exports = ${appData.name}Model;
 
 SystemService.icons = [];
 SystemService.music = [];
+SystemService.images = [];
 SystemService.games = [];
 SystemService.apps = [];
 SystemService.sites = [];
